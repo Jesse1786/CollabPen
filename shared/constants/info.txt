@@ -1,0 +1,1 @@
+Shared constants, IF we need them.

@@ -1,0 +1,3 @@
+Tests for API endpoints.
+
+Not necessary. We can write if we want to double check functionality.

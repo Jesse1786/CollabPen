@@ -1,0 +1,8 @@
+For global styles only. 
+
+For modularity, we will keep each component's style paired up with the component. For example, the files:
+
+/components/NavBar/NavBar.js
+/components/NavBar/NavBar.module.css
+
+will be in the same directory.
