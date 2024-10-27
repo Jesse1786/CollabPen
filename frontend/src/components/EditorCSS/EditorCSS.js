@@ -12,7 +12,7 @@ function EditorCSS( { value, setValue } ) {
   const onChange = useCallback((val) => {
     console.log('val:', val);
     setValue(val);
-  }, []);
+  }, [setValue]);
   
   return (
     <CodeMirror
