@@ -5,7 +5,7 @@ import styles from './Navbar.module.css';
 // Docs: https://mui.com/material-ui/react-app-bar/
 function Navbar() {
   return (
-    <AppBar position="static" className={styles.navbar}>
+    <AppBar position="static" elevation={0} className={styles.navbar} sx={{bgcolor: 'background.default'}}>
       <Toolbar>
         <Typography variant="h4" sx={{ flexGrow: 1 }}>
           CollabPen
