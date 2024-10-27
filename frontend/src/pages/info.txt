@@ -1,5 +1,0 @@
-Pages for next.js routing.
-
-Example:
-/pages/index.js -> correspondes to /
-/pages/login.js -> corresponds to /login
