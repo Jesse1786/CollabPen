@@ -3,32 +3,18 @@ import { createTheme } from '@mui/material/styles';
 // Color scheme inspired by: https://codepen.io/
 const theme = createTheme({
   palette: {
-    mode: 'dark', // Dark mode, because light mode hurts my eyes
+    mode: 'dark',
     background: {
-      default: '#060606', // Shiny black
-      paper: '#2b2b2b', // Light grey
+      default: '#060606', // Default background color
+      paper: '#060606', // Default background for Navbar (and Paper component)
     },
     primary: {
-      main: '#21ce99', // Bright green for primary buttons and some text
-      contrastText: '#ffffff', // White text on primary color
+      main: '#444857', // Background color for UI elements
+      contrastText: '#ffffff', // White text
     },
     secondary: {
-      main: '#ffffff', // White for secondary buttons and text accents
-      contrastText: '#1e1e1e', // Dark text on light secondary background
-    },
-    navbarText: {
-      main: '#ffffff', // White color for the navbar text/buttons
-    },
-    text: {
-      primary: '#ffffff', // White for primary text on a dark background
-      secondary: '#b0b0b0', // Lighter gray for secondary text
-    },
-    divider: '#404040', // Subtle gray for dividers
-    success: {
-      main: '#21ce99', // Green color for success messages or highlights
-    },
-    error: {
-      main: '#ff4563', // Bright red for error messages
+      main: '#03dac6', // Secondary background color for UI elements
+      contrastText: '#000000', // Black text
     },
   },
   typography: {
@@ -41,7 +27,7 @@ const theme = createTheme({
       color: '#b0b0b0', // Light gray for body text readability
     },
     button: {
-      fontWeight: 600,
+      fontWeight: 550,
       color: '#ffffff', // White text on buttons
     },
   },

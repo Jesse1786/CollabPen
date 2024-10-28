@@ -6,20 +6,30 @@ import { Box } from '@mui/material';
 function Preview({ html, css, js }) {
   const srcDoc = `
     <html>
-      <style>${css}</style>
-      <body>${html}</body>
-      <script>${js}</script>
+      <head>
+        <!-- Normalize CSS, so browsers render our page consistently -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+        <style>
+          ${css}
+        </style>
+      </head>
+      <body>
+        ${html}
+        <script>
+          ${js}
+        </script>
+      </body>
     </html>
   `;
 
   return (
-      <Box
-        component="iframe"
-        srcDoc={srcDoc}
-        width="100%"
-        height="100%"
-        sx={{ border: 'none' }}
-      />
+    <Box
+      component="iframe"
+      srcDoc={srcDoc}
+      width="100%"
+      height="100%"
+      sx={{ border: 'none' }}
+    />
   );
 }
 
