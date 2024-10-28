@@ -19,7 +19,7 @@ export default function Home() {
     <>
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
         <Navbar />
-        <Grid container spacing={2} sx={{ borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider', padding: '5px 20px 0' }}>
+        <Grid container spacing={2} sx={{ borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider', padding: '0 20px' }}>
           <Grid size={{ xs: 12, md: 4 }}>
             <EditorHTML value={html} setValue={setHtml} />
           </Grid>

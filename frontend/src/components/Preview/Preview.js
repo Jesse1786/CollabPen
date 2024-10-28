@@ -28,7 +28,7 @@ function Preview({ html, css, js }) {
       srcDoc={srcDoc}
       width="100%"
       height="100%"
-      sx={{ border: 'none' }}
+      sx={{ border: '1px solid', borderColor: 'divider' }}
     />
   );
 }
