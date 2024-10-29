@@ -1,4 +1,0 @@
-For Material UI themes. 
-
-I learned that Material UI lets you set a theme that you can access easily in your components. 
-Not completely sure how it works yet, but folder is here for future refactoring.
