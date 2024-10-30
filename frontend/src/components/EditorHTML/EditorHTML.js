@@ -11,8 +11,8 @@ import { createDelta, resolveDelta } from "@/lib/delta";
   https://www.npmjs.com/package/@uiw/react-codemirror
   https://www.npmjs.com/package/@codemirror/lang-html
 
-  TODO: refactor all code editors into one
-  TODO: find out how to apply theme to the scrollbar
+  TODO: (low priority) refactor all code editors into one
+  TODO: (low priority) find out how to apply theme to the scrollbar
 */
 export default function EditorHTML({ value, setValue, socket }) {
   useEffect(() => {

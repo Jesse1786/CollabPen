@@ -1,13 +1,11 @@
 "use client";
 
-import Navbar from "@/components/Navbar/Navbar";
-import ProjectWorkspace from "./project-workspace/page";
+import Login from "./login/page";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
-      <ProjectWorkspace />
+      <Login />
     </>
   );
 }
