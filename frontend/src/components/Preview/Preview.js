@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 
-// TODO: (medium priority) Implement security features
+// TODO: (med priority) Implement security features
 // TODO: (low priority) Polish frontend design. Add sliders to resize editors, collapser to hide editors, label above the editors, etc
 export default function Preview({ html, css, js }) {
   const srcDoc = `

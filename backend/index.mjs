@@ -19,6 +19,7 @@ const PORT = 4000;
 // CORS options
 const corsOptions = {
   origin: "http://localhost:3000",
+  credentials: true,
 };
 
 // Socket.io
