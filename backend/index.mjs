@@ -55,14 +55,6 @@ setUpLocalStrategy(); // Passport local strategy
 
 app.use("/api", mainRouter); // Routes handling
 
-app.get("/", async (req, res) => {
-  // Store the hashed password
-  const user = new User({ username: "a", email: "b", password: "c" });
-  await user.save();
-  const users = await User.find();
-  res.json(users);
-});
-
 // Temporary room for testing
 let room = "test room";
 
