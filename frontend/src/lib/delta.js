@@ -29,7 +29,6 @@ export function resolveDelta(text, delta) {
       newText = newText.slice(0, from) + t + newText.slice(to);
     } else if (singleDelta.delete) {
       const { from, to } = singleDelta.delete;
-      console.log(text.slice(0, from) + text.slice(to));
       newText = newText.slice(0, from) + newText.slice(to);
     } else if (singleDelta.insert) {
       const { from, text: t } = singleDelta.insert;
