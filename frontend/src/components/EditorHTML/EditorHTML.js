@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from "react";
+import { useCallback } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { Box, Typography } from "@mui/material";
 import { html } from "@codemirror/lang-html";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+
+import { createDelta } from "@/lib/delta";
 
 /* 
   Docs:
@@ -12,14 +14,17 @@ import { vscodeDark } from "@uiw/codemirror-theme-vscode";
   TODO: refactor all code editors into one
   TODO: find out how to apply theme to the scrollbar
 */
-function EditorHTML({ value, setValue }) {
+function EditorHTML({ value, setValue, setDelta }) {
   const onChange = useCallback(
     (val, viewUpdate) => {
-      console.log(viewUpdate.changes);
-      // console.log("val:", val);
+      if (!viewUpdate) return;
+
+      const { fromA, toA, fromB, toB } = viewUpdate.changedRanges[0];
+      const delta = createDelta(val, fromA, toA, fromB, toB);
+      setDelta(delta);
       setValue(val);
     },
-    [setValue]
+    [setValue, setDelta]
   );
 
   return (

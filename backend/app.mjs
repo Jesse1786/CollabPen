@@ -33,20 +33,17 @@ io.on("connection", (socket) => {
 
   // Emit HTML changes to all users in the room
   socket.on("send-delta-html", (delta) => {
-    console.log("delta:", delta);
-    io.to(room).emit("receive-delta-html", delta);
+    socket.to(room).emit("receive-delta-html", delta);
   });
 
   // Emit CSS changes to all users in the room
   socket.on("send-delta-css", (delta) => {
-    console.log("delta:", delta);
-    io.to(room).emit("receive-delta-css", delta);
+    socket.to(room).emit("receive-delta-css", delta);
   });
 
   // Emit JS changes to all users in the room
   socket.on("send-delta-js", (delta) => {
-    console.log("delta:", delta);
-    io.to(room).emit("receive-delta-js", delta);
+    socket.to(room).emit("receive-delta-js", delta);
   });
 });
 
