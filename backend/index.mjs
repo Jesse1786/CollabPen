@@ -4,7 +4,6 @@ import session from "express-session";
 import passport from "passport";
 import cors from "cors";
 import { Server } from "socket.io";
-import { User } from "./models/User.mjs";
 
 // Local imports
 import "dotenv/config";
