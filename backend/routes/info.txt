@@ -1,3 +1,0 @@
-Route definitions. 
-
-We can just start by defining routes in app, and refactor here for clarity/modularity.
