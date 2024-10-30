@@ -19,8 +19,7 @@ function EditorHTML({ value, setValue, setDelta }) {
     (val, viewUpdate) => {
       if (!viewUpdate) return;
 
-      const { fromA, toA, fromB, toB } = viewUpdate.changedRanges[0];
-      const delta = createDelta(val, fromA, toA, fromB, toB);
+      const delta = createDelta(val, viewUpdate.changedRanges);
       setDelta(delta);
       setValue(val);
     },
