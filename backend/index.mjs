@@ -4,8 +4,10 @@ import session from "express-session";
 import passport from "passport";
 import cors from "cors";
 import { Server } from "socket.io";
+import { User } from "./models/User.mjs";
 
 // Local imports
+import "dotenv/config";
 import { createServer } from "http";
 import { connectDB } from "./db/db.mjs";
 import mainRouter from "./routes/mainRouter.mjs";
@@ -38,7 +40,7 @@ app.use(cors(corsOptions));
 // TODO: (low priority) Add security features such as HttpOnly, Secure, SameSite. But first get MVP working.
 app.use(
   session({
-    secret: "fat fluffy cats",
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     cookie: {
@@ -52,6 +54,14 @@ app.use(passport.session());
 setUpLocalStrategy(); // Passport local strategy
 
 app.use("/api", mainRouter); // Routes handling
+
+app.get("/", async (req, res) => {
+  // Store the hashed password
+  const user = new User({ username: "a", email: "b", password: "c" });
+  await user.save();
+  const users = await User.find();
+  res.json(users);
+});
 
 // Temporary room for testing
 let room = "test room";
@@ -81,7 +91,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, (err) => {
   if (err) console.log(err);
   else console.log(`Server is running on port ${PORT}`);
 });

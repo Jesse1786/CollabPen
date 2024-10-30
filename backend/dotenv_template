@@ -1,0 +1,9 @@
+# MongoDB
+MONGO_USERNAME=
+MONGO_PASSWORD=
+MONGO_DATABASE=
+# URI: mongodb://<username>:<password>@<host>:<port>/<database>?authSource=admin
+MONGO_URI=
+
+# Session
+SESSION_SECRET=
