@@ -1,10 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "app.mjs",
+  "main": "index.mjs",
   "scripts": {
-    "prod": "node app.mjs",
-    "dev": "nodemon app.mjs"
+    "prod": "node index.mjs",
+    "dev": "nodemon index.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +18,7 @@
     "mongoose": "^8.7.3",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "socket.io": "^4.8.1",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

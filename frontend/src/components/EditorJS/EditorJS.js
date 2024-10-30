@@ -11,7 +11,7 @@ import { createDelta, resolveDelta } from "@/lib/delta";
   https://www.npmjs.com/package/@uiw/react-codemirror
   https://www.npmjs.com/package/@codemirror/lang-javascript
 */
-function EditorJS({ value, setValue, socket }) {
+export default function EditorJS({ value, setValue, socket }) {
   useEffect(() => {
     if (!socket) return;
 
@@ -68,5 +68,3 @@ function EditorJS({ value, setValue, socket }) {
     </Box>
   );
 }
-
-export default EditorJS;

@@ -14,7 +14,7 @@ import { createDelta, resolveDelta } from "@/lib/delta";
   TODO: refactor all code editors into one
   TODO: find out how to apply theme to the scrollbar
 */
-function EditorHTML({ value, setValue, socket }) {
+export default function EditorHTML({ value, setValue, socket }) {
   useEffect(() => {
     if (!socket) return;
 
@@ -71,5 +71,3 @@ function EditorHTML({ value, setValue, socket }) {
     </Box>
   );
 }
-
-export default EditorHTML;

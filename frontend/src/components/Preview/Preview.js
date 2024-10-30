@@ -1,9 +1,9 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React from "react";
+import { Box } from "@mui/material";
 
 // TODO: (medium priority) Implement security features
 // TODO: (low priority) Polish frontend design. Add sliders to resize editors, collapser to hide editors, label above the editors, etc
-function Preview({ html, css, js }) {
+export default function Preview({ html, css, js }) {
   const srcDoc = `
     <html>
       <head>
@@ -28,9 +28,7 @@ function Preview({ html, css, js }) {
       srcDoc={srcDoc}
       width="100%"
       height="100%"
-      sx={{ border: '1px solid', borderColor: 'divider' }}
+      sx={{ border: "1px solid", borderColor: "divider" }}
     />
   );
 }
-
-export default Preview;
