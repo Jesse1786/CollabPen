@@ -1,26 +1,39 @@
-import React, { useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { Box, Typography } from "@mui/material";
 import { javascript } from "@codemirror/lang-javascript";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 
-import { createDelta } from "@/lib/delta";
+import { createDelta, resolveDelta } from "@/lib/delta";
 
 /* 
   Docs:
   https://www.npmjs.com/package/@uiw/react-codemirror
   https://www.npmjs.com/package/@codemirror/lang-javascript
 */
-function EditorJS({ value, setValue, setDelta }) {
+function EditorJS({ value, setValue, socket }) {
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("receive-delta-js", (delta) => {
+      // Use previous value to resolve race conditions
+      setValue((prev) => resolveDelta(prev, delta));
+    });
+
+    return () => {
+      socket.off("receive-delta-js");
+    };
+  }, [socket, value]);
+
   const onChange = useCallback(
     (val, viewUpdate) => {
-      if (!viewUpdate) return;
+      if (!socket || !viewUpdate) return;
 
       const delta = createDelta(val, viewUpdate.changedRanges);
-      setDelta(delta);
+      if (delta) socket.emit("send-delta-js", delta);
       setValue(val);
     },
-    [setValue, setDelta]
+    [setValue, socket]
   );
 
   return (
