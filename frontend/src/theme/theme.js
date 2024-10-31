@@ -16,8 +16,9 @@ const theme = createTheme({
       main: '#03dac6', // Secondary background color for UI elements
       contrastText: '#000000', // Black text
     },
-    label: {
-      main: '#aaaebc'
+    text: {
+      primary: '#ffffff', // White text
+      secondary: '#ffffff', // White text
     },
     divider: '#404040', // Subtle gray for dividers
   },
@@ -35,7 +36,7 @@ const theme = createTheme({
       color: '#ffffff', // White text
     },
     label: {
-      color: '#aaaebc', // 
+      color: '#aaaebc', // Light gray
       fontWeight: 600,
     }
   },
