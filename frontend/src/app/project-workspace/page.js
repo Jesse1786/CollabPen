@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthProvider";
+import { useRouter } from "next/navigation";
 import { Grid2 as Grid, Box } from "@mui/material";
 import io from "socket.io-client";
 
+import { useAuth } from "@/context/AuthProvider";
 import { htmlPlaceholder, cssPlaceholder, jsPlaceholder } from "./placeholder";
 import EditorHTML from "@/components/EditorHTML/EditorHTML";
 import EditorCSS from "@/components/EditorCSS/EditorCSS";
@@ -19,7 +19,7 @@ const URL = "http://localhost:4000";
 export default function ProjectWorkspace() {
   const router = useRouter();
 
-  const { user, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
+  const { user, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
   const [html, setHtml] = useState(htmlPlaceholder);
   const [css, setCss] = useState(cssPlaceholder);
   const [js, setJs] = useState(jsPlaceholder);
@@ -30,12 +30,7 @@ export default function ProjectWorkspace() {
     if (!loading && !user) {
       router.push("/login");
     }
-  }, [user, loading, router]);
-
-  // Hide the page if auth check is not completed or user is not logged in
-  if (loading || !user) {
-    return null;
-  }
+  }, [user, loading]);
 
   useEffect(() => {
     const sock = io(URL);
@@ -45,6 +40,11 @@ export default function ProjectWorkspace() {
       sock.disconnect();
     };
   }, []);
+
+  // Hide the page if auth check is not completed or user is not logged in
+  if (loading || !user) {
+    return null;
+  }
 
   return (
     <>

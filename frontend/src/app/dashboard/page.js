@@ -1,8 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthProvider";
+import { useRouter } from "next/navigation";
 import {
   Container,
   Paper,
@@ -15,7 +14,10 @@ import {
   Tab,
 } from "@mui/material";
 
+import { useAuth } from "@/context/AuthProvider";
 import Navbar from "@/components/Navbar/Navbar";
+import ProjectEntry from "@/components/ProjectEntry/ProjectEntry";
+import ProjectPanel from "@/components/ProjectPanel/ProjectPanel";
 
 // Tabs docs: https://mui.com/material-ui/react-tabs/
 function TabPanel(props) {
@@ -43,6 +45,7 @@ function LeftSection(props) {
         width: "30%",
         maxWidth: "300px",
         height: "100%",
+        pt: 5,
       }}
     >
       {props.children}
@@ -51,13 +54,22 @@ function LeftSection(props) {
 }
 
 function RightSection(props) {
-  return <Box>{props.children}</Box>;
+  return (
+    <Box
+      sx={{
+        flexGrow: 1,
+        height: "100%",
+      }}
+    >
+      {props.children}
+    </Box>
+  );
 }
 
 export default function Dashboard() {
   const router = useRouter();
 
-  const { user, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
+  const { user, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
   const [tabIndex, setTabIndex] = useState(0);
 
   // Redirect to login if auth check completed and user is not logged in
@@ -109,8 +121,13 @@ export default function Dashboard() {
           </LeftSection>
 
           <RightSection>
+              {/* TODO: (high priority) Generate based on backend API. Refactoring to use ProjectPanel component */}
             <TabPanel value={tabIndex} index={0}>
-              Projects page coming soon...
+              <ProjectEntry name="Project 1" description="My first project" />
+              <ProjectEntry name="Project 2" description="My second project" />
+              <ProjectEntry name="Project 3" description="My third project" />
+              <ProjectEntry name="Project 4" description="My fourth project" />
+              <ProjectEntry name="Project 5" description="My fifth project" />
             </TabPanel>
             <TabPanel value={tabIndex} index={1}>
               Account page coming soon...

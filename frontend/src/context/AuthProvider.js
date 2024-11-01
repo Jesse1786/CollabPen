@@ -1,20 +1,22 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const AuthContext = createContext();
 
 /* 
 Wrapper that provides the user object and login/logout functions nested components
 
-Note: AuthProvider does not handle any redirects, it only provides the user object and login/logout functions
+Note: AuthProvider does not handle any redirects, it only exposes the user's authentication status
 Redirects are handled in the components that use the AuthProvider
 */
 export function AuthProvider({ children }) {
+  const pathname = usePathname();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // Used to prevent rendering before auth checks are done
 
   useEffect(() => {
     // Check if the user is authenticated on initial load
-    const checkAuth = async () => {
+    const checkAuth = async () => {      
       try {
         const response = await fetch("http://localhost:4000/api/auth/check", {
           method: "POST",

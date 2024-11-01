@@ -1,8 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthProvider";
+import { useRouter } from "next/navigation";
 import {
   Container,
   Paper,
@@ -12,11 +11,13 @@ import {
   Button,
   Link,
 } from "@mui/material";
+
+import { useAuth } from "@/context/AuthProvider";
 import { AppRegistration as Logo } from "@mui/icons-material";
 
 export default function Login() {
   const router = useRouter();
-  const { user, setUser, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
+  const { user, setUser, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
