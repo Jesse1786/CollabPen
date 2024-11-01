@@ -123,11 +123,7 @@ export default function Dashboard() {
           <RightSection>
               {/* TODO: (high priority) Generate based on backend API. Refactoring to use ProjectPanel component */}
             <TabPanel value={tabIndex} index={0}>
-              <ProjectEntry name="Project 1" description="My first project" />
-              <ProjectEntry name="Project 2" description="My second project" />
-              <ProjectEntry name="Project 3" description="My third project" />
-              <ProjectEntry name="Project 4" description="My fourth project" />
-              <ProjectEntry name="Project 5" description="My fifth project" />
+              <ProjectPanel />
             </TabPanel>
             <TabPanel value={tabIndex} index={1}>
               Account page coming soon...
