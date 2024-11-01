@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthProvider";
 import {
   Container,
   Paper,
@@ -15,6 +16,7 @@ import { AppRegistration as Logo } from "@mui/icons-material";
 
 export default function Login() {
   const router = useRouter();
+  const { user, setUser, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +24,18 @@ export default function Login() {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  // Redirect to dashboard if auth check completed and user is logged in
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/dashboard");
+    }
+  }, [user, loading]);
+
+  // Hide the page if auth check is not completed or user is already logged in
+  if (loading || user) {
+    return null;
+  }
 
   const handleLogin = async () => {
     if (!username) {
@@ -47,9 +61,9 @@ export default function Login() {
       });
 
       if (response.status === 200) {
-        console.log("Logged in successfully");
+        const data = await response.json();
         setLoginError("");
-        router.push("/project-workspace");
+        setUser(data.username); // This triggers the redirect to dashboard
       } else {
         setLoginError("Invalid username or password");
       }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthProvider";
 import {
   Container,
   Paper,
@@ -50,15 +51,26 @@ function LeftSection(props) {
 }
 
 function RightSection(props) {
-  return (
-    <Box>
-      {props.children}
-    </Box>
-  );
+  return <Box>{props.children}</Box>;
 }
 
 export default function Dashboard() {
+  const router = useRouter();
+
+  const { user, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
   const [tabIndex, setTabIndex] = useState(0);
+
+  // Redirect to login if auth check completed and user is not logged in
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading]);
+
+  // Hide the page if auth check is not completed or user is not logged in
+  if (loading || !user) {
+    return null;
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthProvider";
 import { Grid2 as Grid, Box } from "@mui/material";
 import io from "socket.io-client";
 
@@ -14,12 +16,26 @@ import Navbar from "@/components/Navbar/Navbar";
 // Placeholder url
 const URL = "http://localhost:4000";
 
-// TODO: (med priority) only allow access to this page if user is authenticated
 export default function ProjectWorkspace() {
+  const router = useRouter();
+
+  const { user, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
   const [html, setHtml] = useState(htmlPlaceholder);
   const [css, setCss] = useState(cssPlaceholder);
   const [js, setJs] = useState(jsPlaceholder);
   const [socket, setSocket] = useState(null);
+
+  // Redirect to login if auth check completed and user is not logged in
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
+
+  // Hide the page if auth check is not completed or user is not logged in
+  if (loading || !user) {
+    return null;
+  }
 
   useEffect(() => {
     const sock = io(URL);

@@ -10,8 +10,8 @@ export const loginUser = (req, res) => {
     // Need to call req.logIn manually since we are using a custom callback
     // This serializes the user's id in req.session.passport.user
     req.logIn(user, (err) => {
-      if (err) return res.status(500).json({ message: "Server error" });
-      return res.status(200).json({ message: "Login successful" });
+      if (err) return res.status(500).json({ authenticated: false });
+      return res.status(200).json({ authenticated: true, username: user.username, id: user._id });
     });
   })(req, res); // Invoke to make it run immediately
 };
@@ -28,11 +28,11 @@ export const logoutUser = (req, res) => {
   });
 };
 
-// Check if the user is logged in
+// Check if the user is logged in. Returns user info if authenticated
 export const checkAuth = (req, res) => {
   if (req.isAuthenticated()) {
-    res.status(200).json({ message: "Access granted" });
+    res.status(200).json({ authenticated: true, username: req.user.username, id: req.user._id });
   } else {
-    res.status(401).json({ message: "Access denied" });
+    res.status(401).json({ authenticated: false });
   }
 };

@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import React from "react";
+import { useAuth } from "@/context/AuthProvider";
 import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
 import { AppRegistration as Logo } from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -13,6 +14,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { setUser } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -26,6 +28,7 @@ export default function Navbar() {
 
       if (response.status === 200) {
         console.log("Logged out successfully");
+        setUser(null);
         router.push("/login");
       } else {
         console.log(`Failed to logout`, response.status);

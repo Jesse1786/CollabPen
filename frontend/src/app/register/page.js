@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthProvider";
 import {
   Container,
   Paper,
@@ -15,6 +16,7 @@ import { AppRegistration as Logo } from "@mui/icons-material";
 
 export default function Register() {
   const router = useRouter();
+  const { user, setUser, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +26,18 @@ export default function Register() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [registerError, setRegisterError] = useState("");
+
+  // Redirect to dashboard if auth check completed and user is logged in
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/dashboard");
+    }
+  }, [user, loading]);
+
+  // Hide the page if auth check is not completed or user is already logged in
+  if (loading || user) {
+    return null;
+  }
 
   const handleRegister = async () => {
     if (!username) {
