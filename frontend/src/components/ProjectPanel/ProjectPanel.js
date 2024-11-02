@@ -141,7 +141,7 @@ export default function ProjectPanel() {
             onChange={(e) => setDescription(e.target.value)}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{pb: 3, pr: 3}}>
           <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>

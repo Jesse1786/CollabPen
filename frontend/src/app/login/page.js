@@ -11,9 +11,9 @@ import {
   Button,
   Link,
 } from "@mui/material";
+import { AppRegistration as Logo } from "@mui/icons-material";
 
 import { useAuth } from "@/context/AuthProvider";
-import { AppRegistration as Logo } from "@mui/icons-material";
 
 export default function Login() {
   const router = useRouter();

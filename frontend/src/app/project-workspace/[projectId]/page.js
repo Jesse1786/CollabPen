@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Grid2 as Grid, Box } from "@mui/material";
 import io from "socket.io-client";
 
 import { useAuth } from "@/context/AuthProvider";
-import { htmlPlaceholder, cssPlaceholder, jsPlaceholder } from "./placeholder";
+import { htmlPlaceholder, cssPlaceholder, jsPlaceholder } from "../placeholder";
 import EditorHTML from "@/components/EditorHTML/EditorHTML";
 import EditorCSS from "@/components/EditorCSS/EditorCSS";
 import EditorJS from "@/components/EditorJS/EditorJS";
@@ -18,6 +18,7 @@ const URL = "http://localhost:4000";
 
 export default function ProjectWorkspace() {
   const router = useRouter();
+  const { projectId } = useParams();
 
   const { user, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
   const [html, setHtml] = useState(htmlPlaceholder);
@@ -41,6 +42,59 @@ export default function ProjectWorkspace() {
     };
   }, []);
 
+  // Fetch project data from the server
+  useEffect(() => {
+    const fetchProjectData = async () => {
+      if (projectId && user) {
+        try {
+          const response = await fetch(
+            `http://localhost:4000/api/users/${user}/projects/${projectId}`,
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+            }
+          );
+
+          if (!response.ok) {
+            console.log(response.statusText);
+          }
+
+          const data = await response.json();
+          setHtml(data.html);
+          setCss(data.css);
+          setJs(data.js);
+        } catch (error) {
+          console.error("Error fetching project data:", error);
+        }
+      }
+    };
+
+    fetchProjectData();
+  }, [projectId, user]);
+
+  // Save project to the server periodically. This prevents overloading the server with requests on each input change
+  useEffect(() => {
+    const interval = setInterval(() => {
+      saveProject();
+    }, 3000);
+
+    return () => {
+      clearInterval(interval); // Makes it so only one interval is running at a time
+    }
+  }, [html, css, js]);
+
+  const saveProject = async () => {
+    await fetch(`http://localhost:4000/api/users/${user}/projects/${projectId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ html, css, js }),
+    });
+  };
+
+
+
   // Hide the page if auth check is not completed or user is not logged in
   if (loading || !user) {
     return null;
@@ -48,7 +102,13 @@ export default function ProjectWorkspace() {
 
   return (
     <>
-      <Box sx={{height: "calc(100vh - 7px)", display: "flex", flexDirection: "column"}}>
+      <Box
+        sx={{
+          height: "calc(100vh - 7px)",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Navbar />
         <Box
           sx={{

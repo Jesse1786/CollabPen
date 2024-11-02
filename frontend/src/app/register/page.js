@@ -11,9 +11,9 @@ import {
   Button,
   Link,
 } from "@mui/material";
+import { AppRegistration as Logo } from "@mui/icons-material";
 
 import { useAuth } from "@/context/AuthProvider";
-import { AppRegistration as Logo } from "@mui/icons-material";
 
 export default function Register() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
 
   const [usernameError, setUsernameError] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [emailError, setEmailError] = useState(""); // TODO: (low priority) Add email validation
   const [passwordError, setPasswordError] = useState("");
   const [registerError, setRegisterError] = useState("");
 
@@ -71,7 +71,7 @@ export default function Register() {
       if (response.status === 201) {
         console.log("Registered successfully");
         setRegisterError("");
-        router.push("/project-workspace");
+        router.push("/login"); // Redirect to login makes more sense. Can add email verification later
       } else {
         setRegisterError("Username is already taken.");
       }
