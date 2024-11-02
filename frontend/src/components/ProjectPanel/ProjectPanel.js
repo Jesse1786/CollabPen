@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, List, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+
 import ProjectEntry from "../ProjectEntry/ProjectEntry";
 import { useAuth } from "@/context/AuthProvider";
 
@@ -28,13 +30,18 @@ export default function ProjectPanel() {
   }, [user, loading]);
 
   const handleDelete = async (id) => {
-    // const response = await fetch(`http://localhost:8000/api/user/:username/projects/${id}`, {
-    //   method: "DELETE",
-    // });
-    // if (response.ok) {
-    //   fetchProjects();
-    // }
-    console.log("Deleting project with id: ", id);
+    console.log("Trying to delete project with id: ", id);
+    console.log("User: ", user);
+    const response = await fetch(
+      `http://localhost:4000/api/users/${user}/projects/${id}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+    if (response.ok) {
+      fetchProjects();
+    }
   };
 
   const handleGroupAction = async () => {
@@ -42,16 +49,35 @@ export default function ProjectPanel() {
   };
 
   return (
-    <Box>
-      {projects.map((project) => (
-        <ProjectEntry
-          key={project._id}
-          name={project.name}
-          description={project.description}
-          onDelete={() => handleDelete(project.id)}
-          onGroupAction={() => handleGroupAction()}
-        />
-      ))}
-    </Box>
+    <>
+      <Box
+        sx={{
+          pl: 3,
+          pb: 2,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4">Projects</Typography>
+        <Button variant="contained" color="addButton">
+          <AddIcon sx={{ fontSize: 18, marginRight: "2px" }} />
+          New project
+        </Button>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        {projects.map((project) => (
+          <ProjectEntry
+            key={project._id}
+            name={project.name}
+            description={project.description}
+            onDelete={() => handleDelete(project._id)}
+            onGroupAction={() => handleGroupAction()}
+          />
+        ))}
+      </Box>
+    </>
   );
 }

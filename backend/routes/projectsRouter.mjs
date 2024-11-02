@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProject, getProject, getProjects } from '../controllers/projectController.mjs';
+import { createProject, getProject, getProjects, deleteProject } from '../controllers/projectController.mjs';
 
 const projectsRouter = Router({ mergeParams: true });
 
@@ -11,5 +11,8 @@ projectsRouter.get("/:projectId", getProject);
 
 // GET /api/users/:username/projects
 projectsRouter.get("/", getProjects);
+
+// DELETE /api/users/:username/projects/:projectId
+projectsRouter.delete("/:projectId", deleteProject);
 
 export default projectsRouter;

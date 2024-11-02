@@ -51,7 +51,6 @@ export const getProject = async (req, res) => {
   }
 };
 
-// Get all projects that the user has
 export const getProjects = async (req, res) => {
   try {
     const owner = req.params.username;
@@ -74,5 +73,32 @@ export const getProjects = async (req, res) => {
   }
 };
 
+// Delete a project given its id
+export const deleteProject = async (req, res) => {
+  try {
+    const owner = req.params.username;
+    const projectId = req.params.projectId;
 
+    // Check if the user is authenticated
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Access denied" });
+    }
 
+    // Check if the username of the authenticated user matches the owner of the project
+    if (req.user.username !== owner) {
+      return res.status(401).json({ message: "Access denied" });
+    }
+
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    await Project.findByIdAndDelete(projectId);
+
+    res.status(200).json({ message: "Project deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
