@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import { useAuth } from "@/context/AuthProvider";
 
 // Docs: https://mui.com/material-ui/react-dialog/
 export default function ProjectPanel() {
+  const router = useRouter();
   const { user, loading } = useAuth();
   const [projects, setProjects] = useState([]);
 
@@ -110,10 +112,12 @@ export default function ProjectPanel() {
         {projects.map((project) => (
           <ProjectEntry
             key={project._id}
+            id={project._id}
             name={project.name}
             description={project.description}
             onDelete={() => handleDelete(project._id)}
             onGroupAction={() => handleGroupAction()}
+            onClick={() => router.push(`/project-workspace/${project._id}`)}
           />
         ))}
       </Box>

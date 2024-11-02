@@ -41,15 +41,11 @@ export default function Navbar() {
   };
 
   const handleDashboard = async () => {
-    console.log("Inside handleDashboard. Feature not implemented yet");
-    console.log("Current pathname:", pathname);
-    // TODO: Redirect to dashboard. First complete the dashboard page and fix bugs
+    router.push("/dashboard");
   };
 
   const handleSettings = async () => {
-    console.log("Inside handleSettings. Feature not implemented yet");
-    console.log("Current pathname:", pathname);
-    // TODO: Redirect to settings tab in the dashboard, first figure out how to do that
+    router.push("/dashboard/?tab=account");
   };
 
   return (

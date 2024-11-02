@@ -81,19 +81,20 @@ export default function ProjectWorkspace() {
 
     return () => {
       clearInterval(interval); // Makes it so only one interval is running at a time
-    }
+    };
   }, [html, css, js]);
 
   const saveProject = async () => {
-    await fetch(`http://localhost:4000/api/users/${user}/projects/${projectId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ html, css, js }),
-    });
+    await fetch(
+      `http://localhost:4000/api/users/${user}/projects/${projectId}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ html, css, js }),
+      }
+    );
   };
-
-
 
   // Hide the page if auth check is not completed or user is not logged in
   if (loading || !user) {

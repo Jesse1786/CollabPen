@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Container,
   Paper,
@@ -16,7 +16,6 @@ import {
 
 import { useAuth } from "@/context/AuthProvider";
 import Navbar from "@/components/Navbar/Navbar";
-import ProjectEntry from "@/components/ProjectEntry/ProjectEntry";
 import ProjectPanel from "@/components/ProjectPanel/ProjectPanel";
 
 // Docs: https://mui.com/material-ui/react-tabs/
@@ -68,6 +67,7 @@ function RightSection(props) {
 
 export default function Dashboard() {
   const router = useRouter();
+  const searchParams = useSearchParams(); // Lets us access the URL query parameters. Used to set which tab to show
 
   const { user, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
   const [tabIndex, setTabIndex] = useState(0);
@@ -79,14 +79,19 @@ export default function Dashboard() {
     }
   }, [user, loading]);
 
+  // Set the tab index based on the URL query parameter
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "account") {
+      setTabIndex(2);
+      router.replace("/dashboard");
+    }
+  }, [searchParams]);
+
   // Hide the page if auth check is not completed or user is not logged in
   if (loading || !user) {
     return null;
   }
-
-  const handleTabChange = (event, newValue) => {
-    setTabIndex(newValue);
-  };
 
   return (
     <>
@@ -104,7 +109,7 @@ export default function Dashboard() {
             <Tabs
               orientation="vertical"
               value={tabIndex}
-              onChange={handleTabChange}
+              onChange={(e, newValue) => setTabIndex(newValue)}
               textColor="secondary"
               indicatorColor="secondary"
               aria-label="Dashboard tabs"
@@ -114,9 +119,9 @@ export default function Dashboard() {
                 },
               }}
             >
-              <Tab label="Projects" sx={{fontSize: "1rem"}} />
-              <Tab label="Account" sx={{fontSize: "1rem"}} />
-              <Tab label="Payment" sx={{fontSize: "1rem"}} />
+              <Tab label="Projects" sx={{ fontSize: "1rem" }} />
+              <Tab label="Payment" sx={{ fontSize: "1rem" }} />
+              <Tab label="Settings" sx={{ fontSize: "1rem" }} />
             </Tabs>
           </LeftSection>
 
@@ -125,10 +130,10 @@ export default function Dashboard() {
               <ProjectPanel />
             </TabPanel>
             <TabPanel value={tabIndex} index={1}>
-              Account page coming soon...
+              Payment page coming soon...
             </TabPanel>
             <TabPanel value={tabIndex} index={2}>
-              Payment page coming soon...
+              Settings page coming soon...
             </TabPanel>
           </RightSection>
         </Box>

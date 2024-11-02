@@ -4,10 +4,12 @@ import GroupIcon from "@mui/icons-material/Group";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function ProjectEntry({
+  id,
   name,
   description,
   onDelete,
   onGroupAction,
+  onClick,
 }) {
   return (
     <Card
@@ -20,7 +22,18 @@ export default function ProjectEntry({
       }}
     >
       <CardContent>
-        <Typography variant="h5">{name}</Typography>
+        <Typography
+          variant="h5"
+          onClick={onClick}
+          sx={{
+            cursor: "pointer",
+            "&:hover": {
+              color: "secondary.main",
+            },
+          }}
+        >
+          {name}
+        </Typography>
         <Typography variant="body1" color="text.secondary">
           {description}
         </Typography>
