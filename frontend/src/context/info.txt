@@ -1,3 +1,0 @@
-Context provider. Main usecase would be so each nested component has access to the user object. This prevents having to make repeated authentication calls.
-
-Note: Low priority. Can refactor into this for better clarity/modularity.

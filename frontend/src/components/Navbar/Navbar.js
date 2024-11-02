@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import React from "react";
 import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
 import { AppRegistration as Logo } from "@mui/icons-material";
@@ -8,10 +8,14 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 
+import { useAuth } from "@/context/AuthProvider";
+
 // Docs: https://mui.com/material-ui/react-app-bar/
 // TODO: (med priority) Shrink the buttons on smaller screens
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { setUser } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -25,6 +29,7 @@ export default function Navbar() {
 
       if (response.status === 200) {
         console.log("Logged out successfully");
+        setUser(null);
         router.push("/login");
       } else {
         console.log(`Failed to logout`, response.status);
@@ -35,6 +40,18 @@ export default function Navbar() {
     }
   };
 
+  const handleDashboard = async () => {
+    console.log("Inside handleDashboard. Feature not implemented yet");
+    console.log("Current pathname:", pathname);
+    // TODO: Redirect to dashboard. First complete the dashboard page and fix bugs
+  };
+
+  const handleSettings = async () => {
+    console.log("Inside handleSettings. Feature not implemented yet");
+    console.log("Current pathname:", pathname);
+    // TODO: Redirect to settings tab in the dashboard, first figure out how to do that
+  };
+
   return (
     <AppBar position="static" elevation={0}>
       <Toolbar>
@@ -43,13 +60,21 @@ export default function Navbar() {
           CollabPen
         </Typography>
         <Box>
-          <Button variant="contained">
+          <Button
+            variant="contained"
+            disabled={pathname === "/dashboard"}
+            onClick={handleDashboard}
+          >
             <DashboardIcon sx={{ fontSize: 18, marginRight: "2px" }} />
-            <Typography variant="button">Dashboard</Typography>
+            Dashboard
           </Button>
-          <Button variant="contained" sx={{ marginLeft: "10px" }}>
+          <Button
+            variant="contained"
+            onClick={handleSettings}
+            sx={{ marginLeft: "10px" }}
+          >
             <SettingsIcon sx={{ fontSize: 18, marginRight: "2px" }} />
-            <Typography variant="button">Settings</Typography>
+            Settings
           </Button>
           <Button
             variant="contained"
@@ -57,7 +82,7 @@ export default function Navbar() {
             sx={{ marginLeft: "10px" }}
           >
             <LogoutIcon sx={{ fontSize: 18, marginRight: "2px" }} />
-            <Typography variant="button">Log Out</Typography>
+            Log Out
           </Button>
         </Box>
       </Toolbar>
