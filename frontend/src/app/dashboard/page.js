@@ -19,7 +19,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import ProjectEntry from "@/components/ProjectEntry/ProjectEntry";
 import ProjectPanel from "@/components/ProjectPanel/ProjectPanel";
 
-// Tabs docs: https://mui.com/material-ui/react-tabs/
+// Docs: https://mui.com/material-ui/react-tabs/
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -114,14 +114,13 @@ export default function Dashboard() {
                 },
               }}
             >
-              <Tab label="Projects" />
-              <Tab label="Account" />
-              <Tab label="Payment" />
+              <Tab label="Projects" sx={{fontSize: "1rem"}} />
+              <Tab label="Account" sx={{fontSize: "1rem"}} />
+              <Tab label="Payment" sx={{fontSize: "1rem"}} />
             </Tabs>
           </LeftSection>
 
           <RightSection>
-              {/* TODO: (high priority) Generate based on backend API. Refactoring to use ProjectPanel component */}
             <TabPanel value={tabIndex} index={0}>
               <ProjectPanel />
             </TabPanel>

@@ -65,7 +65,7 @@ export const getProjects = async (req, res) => {
       return res.status(401).json({ message: "Access denied" });
     }
 
-    const projects = await Project.find({ owner });
+    const projects = await Project.find({ owner }).sort({ createdAt: -1 });
 
     res.status(200).json(projects);
   } catch (error) {
