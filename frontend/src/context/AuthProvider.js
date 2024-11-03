@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Check if the user is authenticated on initial load
-    const checkAuth = async () => {      
+    const checkAuth = async () => {
       try {
         const response = await fetch("http://localhost:4000/api/auth/check", {
           method: "POST",
@@ -38,7 +38,6 @@ export function AuthProvider({ children }) {
 
     checkAuth();
   }, []);
-
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>

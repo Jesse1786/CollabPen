@@ -16,9 +16,14 @@ const app = express();
 const server = createServer(app); // Need to use http server for socket.io
 const PORT = 4000;
 
+const FRONTEND_URL =
+  process.env.ENV === "prod"
+    ? process.env.FRONTEND_URL || "http://localhost:3000"
+    : "http://localhost:3000";
+
 // CORS options
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: FRONTEND_URL,
   credentials: true,
 };
 

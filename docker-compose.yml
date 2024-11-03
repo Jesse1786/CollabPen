@@ -1,0 +1,71 @@
+services:
+  # nginx reverse proxy
+  # nginx-proxy:
+  #   image: jwilder/nginx-proxy
+  #   container_name: nginx-proxy
+  #   restart: always
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+  #     - ./certs:/etc/nginx/certs
+  #     - ./vhost:/etc/nginx/vhost.d
+  #     - ./html:/usr/share/nginx/html
+
+  # nginx reverse proxy let's encrypt companion
+  # nginx-proxy-acme:
+  #   image: nginxproxy/acme-companion
+  #   container_name: nginx-proxy-acme
+  #   restart: always
+  #   volumes_from:
+  #     - nginx-proxy
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - ./acme:/etc/acme.sh
+  #   environment:
+  #     - DEFAULT_EMAIL=
+
+  # Database
+  db:
+    image: mongo:8.0
+    container_name: db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+
+  # Next.js frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: junkaizhang8/frontend
+    container_name: frontend
+    restart: always
+    # environment:
+    #   - VIRTUAL_HOST=${FRONTEND_HOST}
+    #   - LETSENCRYPT_HOST=${FRONTEND_HOST}
+    ports:
+      - 3000:3000
+
+  # Express.js backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: junkaizhang8/backend
+    container_name: backend
+    restart: always
+    depends_on:
+      - db
+    # environment:
+    #   - VIRTUAL_HOST=${BACKEND_HOST}
+    #   - LETSENCRYPT_HOST=${BACKEND_HOST}
+    ports:
+      - 4000:4000

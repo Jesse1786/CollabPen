@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.mjs",
   "scripts": {
-    "prod": "node index.mjs",
-    "dev": "nodemon index.mjs"
+    "prod": "ENV=prod node index.mjs",
+    "dev": "ENV=dev nodemon index.mjs"
   },
   "author": "",
   "license": "ISC",
