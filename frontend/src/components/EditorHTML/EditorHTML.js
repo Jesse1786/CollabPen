@@ -14,31 +14,7 @@ import { createDelta, resolveDelta } from "@/lib/delta";
   TODO: (low priority) refactor all code editors into one
   TODO: (low priority) find out how to apply theme to the scrollbar
 */
-export default function EditorHTML({ value, setValue, socket }) {
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.on("receive-delta-html", (delta) => {
-      // Use previous value to resolve race conditions
-      setValue((prev) => resolveDelta(prev, delta));
-    });
-
-    return () => {
-      socket.off("receive-delta-html");
-    };
-  }, [socket, value]);
-
-  const onChange = useCallback(
-    (val, viewUpdate) => {
-      if (!socket || !viewUpdate) return;
-
-      const delta = createDelta(val, viewUpdate.changedRanges);
-      if (delta) socket.emit("send-delta-html", delta);
-      setValue(val);
-    },
-    [setValue, socket]
-  );
-
+export default function EditorHTML({ value, setValue }) {
   return (
     <Box
       sx={{
@@ -65,7 +41,7 @@ export default function EditorHTML({ value, setValue, socket }) {
         value={value}
         extensions={[html({ matchClosingTags: true })]}
         theme={vscodeDark}
-        onChange={onChange}
+        onChange={setValue}
         height="35vh"
       />
     </Box>

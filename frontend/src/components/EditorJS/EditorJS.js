@@ -11,31 +11,7 @@ import { createDelta, resolveDelta } from "@/lib/delta";
   https://www.npmjs.com/package/@uiw/react-codemirror
   https://www.npmjs.com/package/@codemirror/lang-javascript
 */
-export default function EditorJS({ value, setValue, socket }) {
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.on("receive-delta-js", (delta) => {
-      // Use previous value to resolve race conditions
-      setValue((prev) => resolveDelta(prev, delta));
-    });
-
-    return () => {
-      socket.off("receive-delta-js");
-    };
-  }, [socket, value]);
-
-  const onChange = useCallback(
-    (val, viewUpdate) => {
-      if (!socket || !viewUpdate) return;
-
-      const delta = createDelta(val, viewUpdate.changedRanges);
-      if (delta) socket.emit("send-delta-js", delta);
-      setValue(val);
-    },
-    [setValue, socket]
-  );
-
+export default function EditorJS({ value, setValue }) {
   return (
     <Box
       sx={{
@@ -62,7 +38,7 @@ export default function EditorJS({ value, setValue, socket }) {
         value={value}
         extensions={[javascript({ jsx: true })]}
         theme={vscodeDark}
-        onChange={onChange}
+        onChange={setValue}
         height="35vh"
       />
     </Box>

@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Grid2 as Grid, Box } from "@mui/material";
-import io from "socket.io-client";
 
 import { useAuth } from "@/context/AuthProvider";
 import { htmlPlaceholder, cssPlaceholder, jsPlaceholder } from "../placeholder";
@@ -24,7 +23,6 @@ export default function ProjectWorkspace() {
   const [html, setHtml] = useState(htmlPlaceholder);
   const [css, setCss] = useState(cssPlaceholder);
   const [js, setJs] = useState(jsPlaceholder);
-  const [socket, setSocket] = useState(null);
 
   // Redirect to login if auth check completed and user is not logged in
   useEffect(() => {
@@ -32,15 +30,6 @@ export default function ProjectWorkspace() {
       router.push("/login");
     }
   }, [user, loading]);
-
-  useEffect(() => {
-    const sock = io(URL);
-    setSocket(sock);
-
-    return () => {
-      sock.disconnect();
-    };
-  }, []);
 
   // Fetch project data from the server
   useEffect(() => {
@@ -129,13 +118,13 @@ export default function ProjectWorkspace() {
             }}
           >
             <Grid size={{ xs: 12, md: 4 }}>
-              <EditorHTML value={html} setValue={setHtml} socket={socket} />
+              <EditorHTML value={html} setValue={setHtml} />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
-              <EditorCSS value={css} setValue={setCss} socket={socket} />
+              <EditorCSS value={css} setValue={setCss} />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
-              <EditorJS value={js} setValue={setJs} socket={socket} />
+              <EditorJS value={js} setValue={setJs} />
             </Grid>
           </Grid>
 
