@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Container,
@@ -65,9 +65,25 @@ function RightSection(props) {
   );
 }
 
-export default function Dashboard() {
+function TabIndexSetter(props) {
+  const { setTabIndex } = props;
   const router = useRouter();
   const searchParams = useSearchParams(); // Lets us access the URL query parameters. Used to set which tab to show
+
+  // Set the tab index based on the URL query parameter
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "account") {
+      setTabIndex(2);
+      router.replace("/dashboard");
+    }
+  }, [setTabIndex, router, searchParams]);
+
+  return null;
+}
+
+export default function Dashboard() {
+  const router = useRouter();
 
   const { user, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
   const [tabIndex, setTabIndex] = useState(0);
@@ -79,15 +95,6 @@ export default function Dashboard() {
     }
   }, [user, loading]);
 
-  // Set the tab index based on the URL query parameter
-  useEffect(() => {
-    const tab = searchParams.get("tab");
-    if (tab === "account") {
-      setTabIndex(2);
-      router.replace("/dashboard");
-    }
-  }, [searchParams]);
-
   // Hide the page if auth check is not completed or user is not logged in
   if (loading || !user) {
     return null;
@@ -97,6 +104,9 @@ export default function Dashboard() {
     <>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Navbar />
+        <Suspense fallback={null}>
+          <TabIndexSetter setTabIndex={setTabIndex} />
+        </Suspense>
         <Box
           sx={{
             display: "flex",

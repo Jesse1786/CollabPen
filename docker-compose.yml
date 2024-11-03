@@ -45,7 +45,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: junkaizhang8/frontend
+    image: junkaizhang8/collabpen-frontend:latest
     container_name: frontend
     restart: always
     # environment:
@@ -59,7 +59,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: junkaizhang8/backend
+    image: junkaizhang8/collabpen-backend:latest
     container_name: backend
     restart: always
     depends_on:
