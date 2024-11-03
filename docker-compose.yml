@@ -42,7 +42,10 @@ services:
 
   # Next.js frontend
   frontend:
-    image: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: junkaizhang8/frontend
     container_name: frontend
     restart: always
     # environment:
@@ -53,7 +56,10 @@ services:
 
   # Express.js backend
   backend:
-    image: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: junkaizhang8/backend
     container_name: backend
     restart: always
     depends_on:
