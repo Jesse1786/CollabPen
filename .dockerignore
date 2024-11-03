@@ -1,0 +1,18 @@
+# git
+**/.git
+**/.gitignore
+
+# docker
+Dockerfile
+*.dockerfile
+
+# node
+**/package-lock.json
+**/node_modules
+
+# database
+data
+
+# other
+README.md
+**/info.txt

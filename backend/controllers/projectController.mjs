@@ -18,7 +18,7 @@ export const createProject = async (req, res) => {
     const project = new Project({ owner, name, description, html, css, js });
     await project.save();
 
-    res.status(201).json(project);
+    res.status(200).json(project);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
