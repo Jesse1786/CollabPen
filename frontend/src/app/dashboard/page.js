@@ -104,7 +104,7 @@ export default function Dashboard() {
     <>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <Navbar />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={null}>
           <TabIndexSetter setTabIndex={setTabIndex} />
         </Suspense>
         <Box
