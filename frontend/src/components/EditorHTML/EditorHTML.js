@@ -1,43 +1,36 @@
-import { useEffect, useCallback } from "react";
-import CodeMirror from "@uiw/react-codemirror";
+import { useEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import { html } from "@codemirror/lang-html";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
-
-import { createDelta, resolveDelta } from "@/lib/delta";
+import { EditorState } from "@codemirror/state";
+import { EditorView, basicSetup } from "codemirror";
+import { yCollab } from "y-codemirror.next";
 
 /* 
   Docs:
   https://www.npmjs.com/package/@uiw/react-codemirror
   https://www.npmjs.com/package/@codemirror/lang-html
 
-  TODO: (low priority) refactor all code editors into one
   TODO: (low priority) find out how to apply theme to the scrollbar
 */
-export default function EditorHTML({ value, setValue, socket }) {
-  useEffect(() => {
-    if (!socket) return;
+export default function EditorHTML({ yHtml, awareness }) {
+  const editorRef = useRef(null);
 
-    socket.on("receive-delta-html", (delta) => {
-      // Use previous value to resolve race conditions
-      setValue((prev) => resolveDelta(prev, delta));
+  useEffect(() => {
+    const editorState = EditorState.create({
+      doc: yHtml.toString(),
+      extensions: [basicSetup, html(), yCollab(yHtml, awareness), vscodeDark],
+    });
+
+    const editorView = new EditorView({
+      state: editorState,
+      parent: editorRef.current,
     });
 
     return () => {
-      socket.off("receive-delta-html");
+      editorView.destroy();
     };
-  }, [socket, value]);
-
-  const onChange = useCallback(
-    (val, viewUpdate) => {
-      if (!socket || !viewUpdate) return;
-
-      const delta = createDelta(val, viewUpdate.changedRanges);
-      if (delta) socket.emit("send-delta-html", delta);
-      setValue(val);
-    },
-    [setValue, socket]
-  );
+  }, []);
 
   return (
     <Box
@@ -61,12 +54,14 @@ export default function EditorHTML({ value, setValue, socket }) {
         <Typography variant="label">HTML</Typography>
       </Box>
 
-      <CodeMirror
-        value={value}
-        extensions={[html({ matchClosingTags: true })]}
-        theme={vscodeDark}
-        onChange={onChange}
-        height="35vh"
+      <Box
+        ref={editorRef}
+        sx={{
+          height: "35vh",
+          "& .cm-editor": {
+            height: "100%",
+          },
+        }}
       />
     </Box>
   );
