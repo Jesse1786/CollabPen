@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import { User } from "../models/User.mjs";
 
 export const createUser = async (req, res) => {
@@ -35,4 +35,4 @@ export const getUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};

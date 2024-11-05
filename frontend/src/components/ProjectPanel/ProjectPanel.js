@@ -15,6 +15,12 @@ import AddIcon from "@mui/icons-material/Add";
 import ProjectEntry from "../ProjectEntry/ProjectEntry";
 import { useAuth } from "@/context/AuthProvider";
 
+import {
+  addUserProject,
+  getUserProjects,
+  deleteUserProject,
+} from "@/services/api";
+
 // Docs: https://mui.com/material-ui/react-dialog/
 export default function ProjectPanel() {
   const router = useRouter();
@@ -28,13 +34,7 @@ export default function ProjectPanel() {
 
   // Get the user's projects from db and update the display
   const fetchProjects = async () => {
-    const response = await fetch(
-      `http://localhost:4000/api/users/${user}/projects`,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    );
+    const response = await getUserProjects(user);
     const data = await response.json();
     setProjects(data);
   };
@@ -47,13 +47,7 @@ export default function ProjectPanel() {
   }, [loading, user]);
 
   const handleDelete = async (id) => {
-    const response = await fetch(
-      `http://localhost:4000/api/users/${user}/projects/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-      }
-    );
+    const response = await deleteUserProject(user, id);
     if (response.ok) {
       fetchProjects();
     }
@@ -73,15 +67,7 @@ export default function ProjectPanel() {
   };
 
   const handleAddProject = async () => {
-    const response = await fetch(
-      `http://localhost:4000/api/users/${user}/projects`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ name, description }),
-      }
-    );
+    const response = await addUserProject(user, name, description);
     if (response.ok) {
       fetchProjects(); // Refresh the project list
       handleClose(); // Close the popup form
@@ -145,7 +131,7 @@ export default function ProjectPanel() {
             onChange={(e) => setDescription(e.target.value)}
           />
         </DialogContent>
-        <DialogActions sx={{pb: 3, pr: 3}}>
+        <DialogActions sx={{ pb: 3, pr: 3 }}>
           <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>

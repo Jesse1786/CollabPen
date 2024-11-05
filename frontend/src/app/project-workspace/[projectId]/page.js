@@ -6,16 +6,13 @@ import { WebsocketProvider } from "y-websocket";
 import { useParams, useRouter } from "next/navigation";
 import { Grid2 as Grid, Box } from "@mui/material";
 
-import { getRandomColour } from "@/lib/colors";
+import { getRandomColour } from "@/utils/colors";
 import { useAuth } from "@/context/AuthProvider";
 import EditorHTML from "@/components/EditorHTML/EditorHTML";
 import EditorCSS from "@/components/EditorCSS/EditorCSS";
 import EditorJS from "@/components/EditorJS/EditorJS";
 import Preview from "@/components/Preview/Preview";
 import Navbar from "@/components/Navbar/Navbar";
-
-// Placeholder url
-const URL = "http://localhost:4000";
 
 /* 
 Docs: 

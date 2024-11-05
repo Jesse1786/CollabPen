@@ -1,0 +1,4 @@
+# NOTE: Client-side environment variables need to be prefixed with NEXT_PUBLIC_
+
+# Backend
+NEXT_PUBLIC_BACKEND_URL=
