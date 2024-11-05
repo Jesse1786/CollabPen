@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
+import { checkAuthenticated } from "@/services/api";
+
 const AuthContext = createContext();
 
 /* 
@@ -18,10 +20,7 @@ export function AuthProvider({ children }) {
     // Check if the user is authenticated on initial load
     const checkAuth = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/auth/check", {
-          method: "POST",
-          credentials: "include",
-        });
+        const response = await checkAuthenticated();
 
         if (response.ok) {
           const data = await response.json();

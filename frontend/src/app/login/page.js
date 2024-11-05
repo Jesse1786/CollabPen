@@ -15,6 +15,8 @@ import { AppRegistration as Logo } from "@mui/icons-material";
 
 import { useAuth } from "@/context/AuthProvider";
 
+import { login } from "@/services/api";
+
 export default function Login() {
   const router = useRouter();
   const { user, setUser, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
@@ -52,14 +54,7 @@ export default function Login() {
 
     // Call backend api to login
     try {
-      const response = await fetch("http://localhost:4000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await login(username, password);
 
       if (response.status === 200) {
         const data = await response.json();
