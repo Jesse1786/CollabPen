@@ -10,13 +10,13 @@ export default function Preview({ html, css, js }) {
         <!-- Normalize CSS, so browsers render our page consistently -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
         <style>
-          ${css}
+          ${css.toString()}
         </style>
       </head>
       <body>
-        ${html}
+        ${html.toString()}
         <script>
-          ${js}
+          ${js.toString()}
         </script>
       </body>
     </html>

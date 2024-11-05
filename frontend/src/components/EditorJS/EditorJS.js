@@ -1,17 +1,40 @@
-import { useEffect, useCallback } from "react";
-import CodeMirror from "@uiw/react-codemirror";
+import { useEffect, useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import { javascript } from "@codemirror/lang-javascript";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
-
-import { createDelta, resolveDelta } from "@/lib/delta";
+import { EditorState } from "@codemirror/state";
+import { EditorView, basicSetup } from "codemirror";
+import { yCollab } from "y-codemirror.next";
 
 /* 
   Docs:
   https://www.npmjs.com/package/@uiw/react-codemirror
   https://www.npmjs.com/package/@codemirror/lang-javascript
 */
-export default function EditorJS({ value, setValue }) {
+export default function EditorJS({ yJs, awareness }) {
+  const editorRef = useRef(null);
+
+  useEffect(() => {
+    const editorState = EditorState.create({
+      doc: yJs.toString(),
+      extensions: [
+        basicSetup,
+        javascript(),
+        yCollab(yJs, awareness),
+        vscodeDark,
+      ],
+    });
+
+    const editorView = new EditorView({
+      state: editorState,
+      parent: editorRef.current,
+    });
+
+    return () => {
+      editorView.destroy();
+    };
+  }, []);
+
   return (
     <Box
       sx={{
@@ -34,12 +57,14 @@ export default function EditorJS({ value, setValue }) {
         <Typography variant="label">JavaScript</Typography>
       </Box>
 
-      <CodeMirror
-        value={value}
-        extensions={[javascript({ jsx: true })]}
-        theme={vscodeDark}
-        onChange={setValue}
-        height="35vh"
+      <Box
+        ref={editorRef}
+        sx={{
+          height: "35vh",
+          "& .cm-editor": {
+            height: "100%",
+          },
+        }}
       />
     </Box>
   );
