@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import * as Y from "yjs";
+import { WebsocketProvider } from "y-websocket";
 import { useParams, useRouter } from "next/navigation";
 import { Grid2 as Grid, Box } from "@mui/material";
 
 import { useAuth } from "@/context/AuthProvider";
-import { htmlPlaceholder, cssPlaceholder, jsPlaceholder } from "../placeholder";
 import EditorHTML from "@/components/EditorHTML/EditorHTML";
 import EditorCSS from "@/components/EditorCSS/EditorCSS";
 import EditorJS from "@/components/EditorJS/EditorJS";
@@ -18,77 +19,66 @@ const URL = "http://localhost:4000";
 export default function ProjectWorkspace() {
   const router = useRouter();
   const { projectId } = useParams();
-
   const { user, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
-  const [html, setHtml] = useState(htmlPlaceholder);
-  const [css, setCss] = useState(cssPlaceholder);
-  const [js, setJs] = useState(jsPlaceholder);
 
-  // Redirect to login if auth check completed and user is not logged in
+  const [doc, setDoc] = useState({ html: "", css: "", js: "" });
+  const yHtmlRef = useRef(null);
+  const yCssRef = useRef(null);
+  const yJsRef = useRef(null);
+
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-  }, [user, loading]);
+    const ydoc = new Y.Doc();
+    const provider = new WebsocketProvider(
+      "ws://localhost:1234",
+      "project-workspace-test",
+      ydoc
+    );
+    const yHtml = ydoc.getText("html");
+    const yCss = ydoc.getText("css");
+    const yJs = ydoc.getText("js");
 
-  // Fetch project data from the server
-  useEffect(() => {
-    const fetchProjectData = async () => {
-      if (projectId && user) {
-        try {
-          const response = await fetch(
-            `http://localhost:4000/api/users/${user}/projects/${projectId}`,
-            {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-            }
-          );
+    yHtmlRef.current = yHtml;
+    yCssRef.current = yCss;
+    yJsRef.current = yJs;
 
-          if (!response.ok) {
-            console.log(response.statusText);
-          }
+    yHtml.observe(() => {
+      setDoc((prevDoc) => ({ ...prevDoc, html: yHtml.toString() }));
+    });
 
-          const data = await response.json();
-          setHtml(data.html);
-          setCss(data.css);
-          setJs(data.js);
-        } catch (error) {
-          console.error("Error fetching project data:", error);
-        }
-      }
-    };
+    yCss.observe(() => {
+      setDoc((prevDoc) => ({ ...prevDoc, css: yCss.toString() }));
+    });
 
-    fetchProjectData();
-  }, [projectId, user]);
-
-  // Save project to the server periodically. This prevents overloading the server with requests on each input change
-  useEffect(() => {
-    const interval = setInterval(() => {
-      saveProject();
-    }, 3000);
+    yJs.observe(() => {
+      setDoc((prevDoc) => ({ ...prevDoc, js: yJs.toString() }));
+    });
 
     return () => {
-      clearInterval(interval); // Makes it so only one interval is running at a time
+      provider.disconnect();
+      ydoc.destroy();
     };
-  }, [html, css, js]);
+  }, []);
 
-  const saveProject = async () => {
-    await fetch(
-      `http://localhost:4000/api/users/${user}/projects/${projectId}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ html, css, js }),
-      }
-    );
+  const handleHtmlChange = (value) => {
+    setDoc((prevDoc) => ({ ...prevDoc, html: value }));
+
+    yHtmlRef.current.delete(0, yHtmlRef.current.length);
+    yHtmlRef.current.insert(0, value);
   };
 
-  // Hide the page if auth check is not completed or user is not logged in
-  if (loading || !user) {
-    return null;
-  }
+  const handleCssChange = (value) => {
+    setDoc((prevDoc) => ({ ...prevDoc, css: value }));
+
+    yCssRef.current.delete(0, yCssRef.current.length);
+    yCssRef.current.insert(0, value);
+  };
+
+  const handleJsChange = (value) => {
+    setDoc((prevDoc) => ({ ...prevDoc, js: value }));
+
+    yJsRef.current.delete(0, yJsRef.current.length);
+    yJsRef.current.insert(0, value);
+  };
 
   return (
     <>
@@ -118,13 +108,13 @@ export default function ProjectWorkspace() {
             }}
           >
             <Grid size={{ xs: 12, md: 4 }}>
-              <EditorHTML value={html} setValue={setHtml} />
+              <EditorHTML value={doc.html} setValue={handleHtmlChange} />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
-              <EditorCSS value={css} setValue={setCss} />
+              <EditorCSS value={doc.css} setValue={handleCssChange} />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
-              <EditorJS value={js} setValue={setJs} />
+              <EditorJS value={doc.js} setValue={handleJsChange} />
             </Grid>
           </Grid>
 
@@ -136,7 +126,7 @@ export default function ProjectWorkspace() {
               minHeight: "400px",
             }}
           >
-            <Preview html={html} css={css} js={js} />
+            <Preview html={doc.html} css={doc.css} js={doc.js} />
           </Box>
         </Box>
       </Box>
