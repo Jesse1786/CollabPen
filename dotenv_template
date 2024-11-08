@@ -4,5 +4,6 @@ MONGO_PASSWORD=
 MONGO_DATABASE=
 
 # Deployment
-FRONTEND_DOMAIN=
-BACKEND_DOMAIN=
+FRONTEND_DOMAIN=collabpen.ca
+BACKEND_DOMAIN=api.collabpen.ca
+YWS_DOMAIN=ws.collabpen.ca
