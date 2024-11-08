@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const USERNAME = process.env.MONGO_USERNAME;
 const PASSWORD = process.env.MONGO_PASSWORD;
 const DATABASE = process.env.MONGO_DATABASE;
-const HOST = process.env.ENV === "prod" ? "db" : "localhost";
+const HOST = process.env.MONGO_HOST || "localhost";
 
 if (!USERNAME || !PASSWORD || !DATABASE) {
   console.error("MongoDB environment variables are not set.");
@@ -12,7 +12,6 @@ if (!USERNAME || !PASSWORD || !DATABASE) {
 }
 
 const MONGO_URI = `mongodb://${USERNAME}:${PASSWORD}@${HOST}:27017/${DATABASE}?authSource=admin`;
-console.log(MONGO_URI);
 
 export const connectDB = async () => {
   try {

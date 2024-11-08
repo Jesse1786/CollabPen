@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:lts-slim AS build
+FROM node:lts-slim AS build
 
 RUN mkdir -p /app
 WORKDIR /app
@@ -6,8 +6,8 @@ COPY . /app
 RUN npm install
 RUN npm run build
 
-FROM --platform=linux/amd64 node:lts-slim AS main
+FROM node:lts-slim AS main
 WORKDIR /app
 COPY --from=build /app /app
 EXPOSE 3000
-CMD ["npm","run","start"]
+CMD ["npm", "run", "start"]

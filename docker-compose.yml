@@ -1,19 +1,32 @@
 services:
   # nginx reverse proxy
-  # nginx-proxy:
-  #   image: jwilder/nginx-proxy
-  #   container_name: nginx-proxy
-  #   restart: always
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-  #   volumes:
-  #     - /var/run/docker.sock:/tmp/docker.sock:ro
-  #     - ./certs:/etc/nginx/certs
-  #     - ./vhost:/etc/nginx/vhost.d
-  #     - ./html:/usr/share/nginx/html
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
 
-  # Database
+  # Reverse proxy let's encrypt companion
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    environment:
+      - DEFAULT_EMAIL=junkaizhang8@gmail.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./acme:/etc/acme.sh
+
+  # MongoDB database
   db:
     image: mongo:8.0
     container_name: db
@@ -22,10 +35,23 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
-    ports:
-      - 27017:27017
+    expose:
+      - 27017
     volumes:
       - ./data:/data/db
+
+  # y-websocket server
+  y-websocket:
+    image: node:lts-slim
+    container_name: y-websocket
+    working_dir: /app
+    restart: always
+    entrypoint: ["npx", "y-websocket"]
+    environment:
+      - HOST=0.0.0.0
+      - PORT=1234
+    expose:
+      - 1234
 
   # Next.js frontend
   frontend:
@@ -35,11 +61,9 @@ services:
     image: junkaizhang8/collabpen-frontend:latest
     container_name: frontend
     restart: always
-    ports:
-      - 3000:3000
-    # environment:
-    #   - VIRTUAL_HOST=localhost
-    #   - LETSENCRYPT_HOST=${FRONTEND_HOST}
+    environment:
+      - VIRTUAL_HOST=${FRONTEND_DOMAIN}
+      - LETSENCRYPT_HOST=${FRONTEND_DOMAIN}
 
   # Express.js backend
   backend:
@@ -51,21 +75,7 @@ services:
     restart: always
     depends_on:
       - db
-    ports:
-      - 4000:4000
-    # environment:
-    #   - VIRTUAL_HOST=${BACKEND_HOST}
-    #   - LETSENCRYPT_HOST=${BACKEND_HOST}
-
-  # y-websocket
-  y-websocket:
-    image: node:lts-slim
-    container_name: y-websocket
-    working_dir: /app
-    restart: always
-    entrypoint: ["npx", "y-websocket"]
     environment:
-      - HOST=0.0.0.0
-      - PORT=1234
-    ports:
-      - 1234:1234
+      - MONGO_HOST=db
+      - VIRTUAL_HOST=${BACKEND_DOMAIN}
+      - LETSENCRYPT_HOST=${BACKEND_DOMAIN}

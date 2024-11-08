@@ -2,3 +2,6 @@
 
 # Backend
 NEXT_PUBLIC_BACKEND_URL=
+
+# y-websocket
+NEXT_PUBLIC_YWS_HOST=
