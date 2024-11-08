@@ -17,16 +17,14 @@ const PORT = 4000;
 
 const FRONTEND_URL =
   process.env.ENV === "prod"
-    ? process.env.FRONTEND_URL || "http://localhost"
-    : "http://localhost";
+    ? process.env.FRONTEND_URL || "http://localhost:3000"
+    : "http://localhost:3000";
 
 // CORS options
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", FRONTEND_URL);
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.header("Access-Control-Allow-Methods", "*");
-  next();
-});
+const corsOptions = {
+  origin: FRONTEND_URL,
+  credentials: true,
+};
 
 // Connect to MongoDB
 connectDB();
