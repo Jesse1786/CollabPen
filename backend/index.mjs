@@ -21,18 +21,17 @@ const FRONTEND_URL =
     : "http://localhost";
 
 // CORS options
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", FRONTEND_URL);
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.header("Access-Control-Allow-Methods", "*");
-  next();
-});
+const corsOptions = {
+  origin: FRONTEND_URL,
+  credentials: true,
+};
 
 // Connect to MongoDB
 connectDB();
 
 // Middleware
 app.use(express.json());
+app.use(cors(corsOptions));
 
 // TODO: (low priority) Add security features such as HttpOnly, Secure, SameSite. But first get MVP working.
 app.use(
