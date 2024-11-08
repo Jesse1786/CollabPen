@@ -12,6 +12,7 @@ if (!USERNAME || !PASSWORD || !DATABASE) {
 }
 
 const MONGO_URI = `mongodb://${USERNAME}:${PASSWORD}@${HOST}:27017/${DATABASE}?authSource=admin`;
+console.log(MONGO_URI);
 
 export const connectDB = async () => {
   try {
