@@ -7,6 +7,7 @@ on:
 env:
   FRONTEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/collabpen-frontend:latest
   BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/collabpen-backend:latest
+  Y_WEBSOCKET_IMAGE: ${{ secrets.DOCKER_USERNAME }}/collabpen-y-websocket:latest
 
 jobs:
   push-frontend:

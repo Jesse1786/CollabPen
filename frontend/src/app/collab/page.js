@@ -33,7 +33,7 @@ export default function TestArea() {
 
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(
-      "ws://localhost:1234",
+      "ws://34.130.11.142:1234",
       "test-room-123",
       ydoc
     );

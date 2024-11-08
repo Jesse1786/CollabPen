@@ -17,8 +17,8 @@ const PORT = 4000;
 
 const FRONTEND_URL =
   process.env.ENV === "prod"
-    ? process.env.FRONTEND_URL || "http://localhost:3000"
-    : "http://localhost:3000";
+    ? process.env.FRONTEND_URL || "http://localhost"
+    : "http://localhost";
 
 // CORS options
 const corsOptions = {

@@ -13,19 +13,6 @@ services:
   #     - ./vhost:/etc/nginx/vhost.d
   #     - ./html:/usr/share/nginx/html
 
-  # nginx reverse proxy let's encrypt companion
-  # nginx-proxy-acme:
-  #   image: nginxproxy/acme-companion
-  #   container_name: nginx-proxy-acme
-  #   restart: always
-  #   volumes_from:
-  #     - nginx-proxy
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #     - ./acme:/etc/acme.sh
-  #   environment:
-  #     - DEFAULT_EMAIL=
-
   # Database
   db:
     image: mongo:8.0
@@ -48,11 +35,11 @@ services:
     image: junkaizhang8/collabpen-frontend:latest
     container_name: frontend
     restart: always
-    # environment:
-    #   - VIRTUAL_HOST=${FRONTEND_HOST}
-    #   - LETSENCRYPT_HOST=${FRONTEND_HOST}
     ports:
       - 3000:3000
+    # environment:
+    #   - VIRTUAL_HOST=localhost
+    #   - LETSENCRYPT_HOST=${FRONTEND_HOST}
 
   # Express.js backend
   backend:
@@ -64,8 +51,18 @@ services:
     restart: always
     depends_on:
       - db
+    ports:
+      - 4000:4000
     # environment:
     #   - VIRTUAL_HOST=${BACKEND_HOST}
     #   - LETSENCRYPT_HOST=${BACKEND_HOST}
+
+  # y-websocket
+  y-websocket:
+    image: nodesource/node:20-slim
+    container_name: y-websocket
+    working_dir: /app
+    restart: always
+    entrypoint: ["npx", "y-websocket", "--host", "0.0.0.0", "--port", "1234"]
     ports:
-      - 4000:4000
+      - 1234:1234
