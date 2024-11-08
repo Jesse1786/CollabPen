@@ -59,7 +59,7 @@ services:
 
   # y-websocket
   y-websocket:
-    image: nodesource/node:20-slim
+    image: node:lts-slim
     container_name: y-websocket
     working_dir: /app
     restart: always
