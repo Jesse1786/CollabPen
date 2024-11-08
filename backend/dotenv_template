@@ -1,5 +1,5 @@
 # Frontend
-FRONTEND_URL=
+FRONTEND_URL=https://collabpen.ca
 
 # Session
 SESSION_SECRET=

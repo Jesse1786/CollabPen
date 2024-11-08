@@ -51,6 +51,8 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=1234
+      - VIRTUAL_HOST=${YJS_DOMAIN}
+      - LETSENCRYPT_HOST=${YJS_DOMAIN}
     expose:
       - 1234
 

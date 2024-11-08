@@ -1,7 +1,7 @@
 # NOTE: Client-side environment variables need to be prefixed with NEXT_PUBLIC_
 
 # Backend
-NEXT_PUBLIC_BACKEND_URL=
+NEXT_PUBLIC_BACKEND_URL=https://api.collabpen.ca
 
 # y-websocket
-NEXT_PUBLIC_YWS_HOST=
+NEXT_PUBLIC_YWS_URL=wss://ws.collabpen.ca

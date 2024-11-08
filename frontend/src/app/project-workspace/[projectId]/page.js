@@ -39,10 +39,10 @@ export default function ProjectWorkspace() {
   const yCssRef = useRef(null);
   const yJsRef = useRef(null);
 
-  const YWS_HOST =
+  const YWS_URL =
     process.env.NEXT_PUBLIC_ENV === "prod"
-      ? process.env.NEXT_PUBLIC_YWS_HOST || "localhost"
-      : "localhost";
+      ? process.env.NEXT_PUBLIC_YWS_URL || "ws://localhost:1234"
+      : "ws://localhost:1234";
 
   // Redirect to login if auth check completed and user is not logged in
   useEffect(() => {
@@ -63,11 +63,7 @@ export default function ProjectWorkspace() {
 
       // Connect to the y-websocket server to sync the Yjs documents
       const ydoc = new Y.Doc();
-      const provider = new WebsocketProvider(
-        `ws://${YWS_HOST}:1234`,
-        projectId,
-        ydoc
-      );
+      const provider = new WebsocketProvider(YWS_URL, projectId, ydoc);
 
       // Create sub-documents for HTML, CSS, and JS
       const yHtml = ydoc.getText("html");
