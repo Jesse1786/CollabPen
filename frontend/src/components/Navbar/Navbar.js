@@ -10,6 +10,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import { useAuth } from "@/context/AuthProvider";
 
+import { logout } from "@/services/api";
+
 // Docs: https://mui.com/material-ui/react-app-bar/
 // TODO: (med priority) Shrink the buttons on smaller screens
 export default function Navbar() {
@@ -19,13 +21,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await logout();
 
       if (response.status === 200) {
         console.log("Logged out successfully");

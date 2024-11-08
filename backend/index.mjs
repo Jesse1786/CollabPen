@@ -3,7 +3,6 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import cors from "cors";
-import { Server } from "socket.io";
 
 // Local imports
 import "dotenv/config";
@@ -13,22 +12,19 @@ import mainRouter from "./routes/mainRouter.mjs";
 import setUpLocalStrategy from "./passport/localStrategy.mjs";
 
 const app = express();
-const server = createServer(app); // Need to use http server for socket.io
+const server = createServer(app);
 const PORT = 4000;
+
+const FRONTEND_URL =
+  process.env.ENV === "prod"
+    ? process.env.FRONTEND_URL || "http://localhost"
+    : "http://localhost";
 
 // CORS options
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: FRONTEND_URL,
   credentials: true,
 };
-
-// Socket.io
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
-});
 
 // Connect to MongoDB
 connectDB();
@@ -57,31 +53,6 @@ app.use("/api", mainRouter); // Routes handling
 
 // Temporary room for testing
 let room = "test room";
-
-// Socket.io connection
-io.on("connection", (socket) => {
-  console.log(`user connected: ${socket.id}`);
-  socket.join(room);
-
-  socket.on("disconnect", () => {
-    console.log(`user disconnected: ${socket.id}`);
-  });
-
-  // Emit HTML changes to all users in the room
-  socket.on("send-delta-html", (delta) => {
-    socket.to(room).emit("receive-delta-html", delta);
-  });
-
-  // Emit CSS changes to all users in the room
-  socket.on("send-delta-css", (delta) => {
-    socket.to(room).emit("receive-delta-css", delta);
-  });
-
-  // Emit JS changes to all users in the room
-  socket.on("send-delta-js", (delta) => {
-    socket.to(room).emit("receive-delta-js", delta);
-  });
-});
 
 server.listen(PORT, (err) => {
   if (err) console.log(err);

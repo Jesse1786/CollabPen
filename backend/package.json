@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.mjs",
   "scripts": {
-    "prod": "node index.mjs",
-    "dev": "nodemon index.mjs"
+    "prod": "ENV=prod node index.mjs",
+    "dev": "ENV=dev nodemon index.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -17,8 +17,7 @@
     "express-session": "^1.18.1",
     "mongoose": "^8.7.3",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0",
-    "socket.io": "^4.8.1"
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

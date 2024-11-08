@@ -15,6 +15,8 @@ import { AppRegistration as Logo } from "@mui/icons-material";
 
 import { useAuth } from "@/context/AuthProvider";
 
+import { register } from "@/services/api";
+
 export default function Register() {
   const router = useRouter();
   const { user, setUser, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
@@ -59,14 +61,7 @@ export default function Register() {
 
     // Call backend api to register
     try {
-      const response = await fetch("http://localhost:4000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ username, email, password }),
-      });
+      const response = await register(username, email, password);
 
       if (response.status === 201) {
         console.log("Registered successfully");
