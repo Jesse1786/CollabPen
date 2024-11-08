@@ -37,7 +37,7 @@ export const logout = async () => {
 
 export const checkAuthenticated = async () => {
   return fetch(`${BACKEND_URL}/api/auth/check`, {
-    method: "GET",
+    method: "POST",
     credentials: "include",
   });
 };
