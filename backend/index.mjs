@@ -33,7 +33,6 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors(corsOptions));
 
 // TODO: (low priority) Add security features such as HttpOnly, Secure, SameSite. But first get MVP working.
 app.use(

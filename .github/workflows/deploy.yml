@@ -3,7 +3,7 @@ name: Deploy to Virtual Machine
 on:
   push:
     branches:
-      - main
+      - prod
 env:
   FRONTEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/collabpen-frontend:latest
   BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/collabpen-backend:latest
