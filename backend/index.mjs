@@ -21,10 +21,12 @@ const FRONTEND_URL =
     : "http://localhost";
 
 // CORS options
-const corsOptions = {
-  origin: FRONTEND_URL,
-  credentials: true,
-};
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.FRONTEND);
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Methods", "*");
+  next();
+});
 
 // Connect to MongoDB
 connectDB();
