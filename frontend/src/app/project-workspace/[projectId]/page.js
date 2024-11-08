@@ -59,7 +59,7 @@ export default function ProjectWorkspace() {
       // Connect to the y-websocket server to sync the Yjs documents
       const ydoc = new Y.Doc();
       const provider = new WebsocketProvider(
-        "ws://localhost:1234",
+        "ws://34.130.11.142:1234",
         projectId,
         ydoc
       );
