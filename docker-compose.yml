@@ -43,7 +43,7 @@ services:
 
   # y-websocket server
   y-websocket:
-    image: node:lts-slim
+    image: node:18-slim
     container_name: y-websocket
     working_dir: /app
     restart: always
@@ -51,8 +51,8 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=1234
-      - VIRTUAL_HOST=${YJS_DOMAIN}
-      - LETSENCRYPT_HOST=${YJS_DOMAIN}
+      - VIRTUAL_HOST=${YWS_DOMAIN}
+      - LETSENCRYPT_HOST=${YWS_DOMAIN}
     expose:
       - 1234
 
