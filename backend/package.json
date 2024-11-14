@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.mjs",
   "scripts": {
-    "prod": "ENV=prod node index.mjs",
-    "dev": "ENV=dev nodemon index.mjs"
+    "prod": "cross-env ENV=prod node index.mjs",
+    "dev": "cross-env ENV=dev nodemon index.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-session": "^1.18.1",
