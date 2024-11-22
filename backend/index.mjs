@@ -51,9 +51,6 @@ setUpLocalStrategy(); // Passport local strategy
 
 app.use("/api", mainRouter); // Routes handling
 
-// Temporary room for testing
-let room = "test room";
-
 server.listen(PORT, (err) => {
   if (err) console.log(err);
   else console.log(`Server is running on port ${PORT}`);
