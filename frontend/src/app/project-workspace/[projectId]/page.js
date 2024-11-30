@@ -5,6 +5,7 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { useParams, useRouter } from "next/navigation";
 import { Grid2 as Grid, Box } from "@mui/material";
+import { encode as base64Encode } from 'base64-arraybuffer';
 
 import { getRandomColour } from "@/utils/colors";
 import { useAuth } from "@/context/AuthProvider";
@@ -13,6 +14,7 @@ import EditorCSS from "@/components/EditorCSS/EditorCSS";
 import EditorJS from "@/components/EditorJS/EditorJS";
 import Preview from "@/components/Preview/Preview";
 import Navbar from "@/components/Navbar/Navbar";
+import { getUserProject, updateUserProject } from "@/services/api";
 
 /* 
 Docs: 
@@ -53,38 +55,15 @@ export default function ProjectWorkspace() {
 
   useEffect(() => {
     if (!loading && user && projectId) {
-      // TODO: (high priority) Check to see if the user is the owner of a collaborator of the project. If they are not, redirect them to the dashboard
-      // I probably need to set up a new state called authorized or something to prevent content from rendering in the meantime
+      // Declare variables in the outer scope so they can be accessed in the cleanup function
+      let ydoc;
+      let provider;
+      let saveInterval;
+      let yHtml;
+      let yCss;
+      let yJs;
 
-      // TODO: Fix bug with the connection error message. Everything works but I need to figure out what it is
-
-      // Give the user's cursor a random color
-      const userColor = getRandomColour();
-
-      // Connect to the y-websocket server to sync the Yjs documents
-      const ydoc = new Y.Doc();
-      const provider = new WebsocketProvider(YWS_URL, projectId, ydoc);
-
-      // Create sub-documents for HTML, CSS, and JS
-      const yHtml = ydoc.getText("html");
-      const yCss = ydoc.getText("css");
-      const yJs = ydoc.getText("js");
-
-      // Need ref to access the sub-documents when outside the useEffect
-      yHtmlRef.current = yHtml;
-      yCssRef.current = yCss;
-      yJsRef.current = yJs;
-
-      // Set the user's name and cursor color
-      provider.awareness.setLocalStateField("user", {
-        name: user,
-        color: userColor.color,
-        colorLight: userColor.light,
-      });
-
-      // Need ref to provider awareness to pass it to editors
-      providerRef.current = provider.awareness;
-
+      // Helper to update the local Preview component
       const updatePreview = () => {
         setDoc({
           html: yHtml.toString(),
@@ -93,16 +72,80 @@ export default function ProjectWorkspace() {
         });
       };
 
-      // When the Yjs documents change, update the local Preview component
-      yHtml.observe(updatePreview);
-      yCss.observe(updatePreview);
-      yJs.observe(updatePreview);
+      // Fetch the project data and set up Y.Doc and provider
+      const setupYDoc = async () => {
+        // Fetch the project data from the backend
+        const response = await getUserProject(user.id, projectId);
+        const data = await response.json();
 
-      setIsSynced(true);
+        // Create our local ydoc
+        ydoc = new Y.Doc();
 
+        // Decode the base64-encoded string to a Uint8Array
+        const ydocUpdate = Uint8Array.from(atob(data.ydoc), (c) =>
+          c.charCodeAt(0)
+        );
+
+        // Apply the update to the Y.Doc
+        Y.applyUpdate(ydoc, ydocUpdate);
+
+        // Connect to the provider
+        provider = new WebsocketProvider(YWS_URL, projectId, ydoc);
+
+        // Create sub-documents for HTML, CSS, and JS
+        yHtml = ydoc.getText("html");
+        yCss = ydoc.getText("css");
+        yJs = ydoc.getText("js");
+
+        // Store refs
+        yHtmlRef.current = yHtml;
+        yCssRef.current = yCss;
+        yJsRef.current = yJs;
+
+        // Update preview with initial data
+        updatePreview();
+
+        // Give the user's cursor a random color
+        const userColor = getRandomColour();
+
+        // Set the user's name and cursor color
+        provider.awareness.setLocalStateField("user", {
+          name: user.name || user.email,
+          color: userColor.color,
+          colorLight: userColor.light,
+        });
+
+        // Store provider awareness ref
+        providerRef.current = provider.awareness;
+
+        // Observe changes to update the preview
+        yHtml.observe(updatePreview);
+        yCss.observe(updatePreview);
+        yJs.observe(updatePreview);
+
+        setIsSynced(true);
+
+        // Periodically save the Yjs document to the database
+        saveInterval = setInterval(async () => {
+          // Encode the Y.Doc state as an update
+          const ydocUpdate = Y.encodeStateAsUpdate(ydoc);
+
+          // Convert the Uint8Array to a base64-encoded string
+          const ydocBase64 = base64Encode(ydocUpdate);
+
+          await updateUserProject(user.id, projectId, ydocBase64);
+        }, 3000); // Save every 3 seconds
+      };
+
+      setupYDoc();
+
+      // Cleanup function
       return () => {
-        provider.disconnect();
-        ydoc.destroy();
+        if (saveInterval) {
+          clearInterval(saveInterval);
+        }
+        if (provider) provider.disconnect();
+        if (ydoc) ydoc.destroy();
       };
     }
   }, [user, loading, projectId]);

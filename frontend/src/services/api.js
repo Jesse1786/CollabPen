@@ -69,9 +69,26 @@ export const getUserProjects = async (userId) => {
   });
 };
 
+export const getUserProject = async (userId, id) => {
+  return fetch(`${BACKEND_URL}/api/users/${userId}/projects/${id}`, {
+    method: "GET",
+    credentials: "include",
+  });
+};
+
+export const updateUserProject = async (userId, id, ydoc) => {
+  return fetch(`${BACKEND_URL}/api/users/${userId}/projects/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ ydoc }),
+  });
+}
+
 export const deleteUserProject = async (userId, id) => {
   return fetch(`${BACKEND_URL}/api/users/${userId}/projects/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
 };
+
