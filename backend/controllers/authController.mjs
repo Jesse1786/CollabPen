@@ -65,6 +65,6 @@ export const checkAuth = (req, res) => {
       id: req.user._id,
     });
   } else {
-    res.status(401).json({ authenticated: false });
+    res.status(200).json({ authenticated: false });
   }
 };
