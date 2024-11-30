@@ -7,3 +7,7 @@ MONGO_DATABASE=
 FRONTEND_DOMAIN=collabpen.ca
 BACKEND_DOMAIN=api.collabpen.ca
 YWS_DOMAIN=ws.collabpen.ca
+
+# env
+ENV_FRONTEND_PATH=./frontend/.env
+ENV_BACKEND_PATH=./backend/.env

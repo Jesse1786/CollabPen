@@ -19,13 +19,11 @@ import { register } from "@/services/api";
 
 export default function Register() {
   const router = useRouter();
-  const { user, setUser, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
+  const { user, loading } = useAuth(); // This checks if the user is already logged in using the AuthProvider
 
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState(""); // TODO: (low priority) Add email validation
   const [passwordError, setPasswordError] = useState("");
   const [registerError, setRegisterError] = useState("");
@@ -43,10 +41,6 @@ export default function Register() {
   }
 
   const handleRegister = async () => {
-    if (!username) {
-      setUsernameError("Username is required");
-      return;
-    }
     if (!email) {
       setEmailError("Email is required");
       return;
@@ -55,20 +49,18 @@ export default function Register() {
       setPasswordError("Password is required");
       return;
     }
-    setUsernameError("");
     setEmailError("");
     setPasswordError("");
 
     // Call backend api to register
     try {
-      const response = await register(username, email, password);
+      const response = await register(email, password);
 
       if (response.status === 201) {
-        console.log("Registered successfully");
         setRegisterError("");
         router.push("/login"); // Redirect to login makes more sense. Can add email verification later
       } else {
-        setRegisterError("Username is already taken.");
+        setRegisterError("Email is already taken.");
       }
     } catch (error) {
       setRegisterError(`Something went wrong: ${error}`);
@@ -104,19 +96,6 @@ export default function Register() {
           </Typography>
         )}
 
-        <TextField
-          label="Username"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value);
-            setRegisterError("");
-          }}
-          error={usernameError && !username}
-          helperText={!username && usernameError}
-        />
         <TextField
           label="Email"
           type="email"

@@ -10,6 +10,9 @@ Dockerfile
 **/package-lock.json
 **/node_modules
 
+# env
+.env
+
 # database
 data
 

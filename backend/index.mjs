@@ -10,6 +10,7 @@ import { createServer } from "http";
 import { connectDB } from "./db/db.mjs";
 import mainRouter from "./routes/mainRouter.mjs";
 import setUpLocalStrategy from "./passport/localStrategy.mjs";
+import setUpGoogleStrategy from "./passport/googleStrategy.mjs";
 
 const app = express();
 const server = createServer(app);
@@ -48,11 +49,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 setUpLocalStrategy(); // Passport local strategy
+setUpGoogleStrategy(); // Passport Google strategy
 
 app.use("/api", mainRouter); // Routes handling
-
-// Temporary room for testing
-let room = "test room";
 
 server.listen(PORT, (err) => {
   if (err) console.log(err);

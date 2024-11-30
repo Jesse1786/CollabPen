@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Container,
   Paper,
@@ -15,16 +16,18 @@ import { AppRegistration as Logo } from "@mui/icons-material";
 
 import { useAuth } from "@/context/AuthProvider";
 
-import { login } from "@/services/api";
+import { login, googleLogin } from "@/services/api";
+
+import googleLogo from "@/public/google-logo.webp";
 
 export default function Login() {
   const router = useRouter();
   const { user, setUser, loading } = useAuth(); // Check if the user is already logged in using the AuthProvider
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
 
@@ -41,27 +44,26 @@ export default function Login() {
   }
 
   const handleLogin = async () => {
-    if (!username) {
-      setUsernameError("Username is required");
+    if (!email) {
+      setEmailError("Email is required");
       return;
     }
     if (!password) {
       setPasswordError("Password is required");
       return;
     }
-    setUsernameError("");
+    setEmailError("");
     setPasswordError("");
 
     // Call backend api to login
     try {
-      const response = await login(username, password);
+      const response = await login(email, password);
 
       if (response.status === 200) {
         const data = await response.json();
-        setLoginError("");
-        setUser(data.username); // This triggers the redirect to dashboard
+        setUser({ id: data.id, email: data.email }); // This triggers the redirect to dashboard
       } else {
-        setLoginError("Invalid username or password");
+        setLoginError("Invalid email or password");
       }
     } catch (error) {
       setLoginError(`Something went wrong: ${error}`);
@@ -98,17 +100,17 @@ export default function Login() {
         )}
 
         <TextField
-          label="Username"
+          label="Email"
           variant="outlined"
           fullWidth
           margin="normal"
-          value={username}
+          value={email}
           onChange={(e) => {
-            setUsername(e.target.value);
+            setEmail(e.target.value);
             setLoginError("");
           }}
-          error={usernameError && !username}
-          helperText={!username && usernameError}
+          error={emailError && !email}
+          helperText={!email && emailError}
         />
         <TextField
           label="Password"
@@ -133,6 +135,23 @@ export default function Login() {
           sx={{ mt: 2 }}
         >
           Log In
+        </Button>
+
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={googleLogin}
+          sx={{ mt: 2 }}
+        >
+          <Image
+            src={googleLogo}
+            alt="Google Logo"
+            width={24}
+            height={24}
+            style={{ marginRight: 6 }}
+          ></Image>
+          Log In With Google
         </Button>
 
         <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>

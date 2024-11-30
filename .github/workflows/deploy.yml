@@ -26,7 +26,6 @@ jobs:
 
       - name: Build frontend image
         run: |
-          echo "${{ secrets.FRONTEND_ENV }}" > .env
           docker build -t $FRONTEND_IMAGE .
 
       - name: Push frontend image to Docker Hub
@@ -50,7 +49,6 @@ jobs:
 
       - name: Build backend image
         run: |
-          echo "${{ secrets.BACKEND_ENV }}" > .env
           docker build -t $BACKEND_IMAGE .
 
       - name: Push backend image to Docker Hub
@@ -71,6 +69,8 @@ jobs:
           script: |
             docker compose down --remove-orphans
             echo "${{ secrets.ROOT_ENV }}" > ~/.env
+            echo "${{ secrets.FRONTEND_ENV }}" > ~/.env-frontend
+            echo "${{ secrets.BACKEND_ENV }}" > ~/.env-backend
             docker compose pull
             docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
             docker compose up -d

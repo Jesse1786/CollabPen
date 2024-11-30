@@ -4,7 +4,7 @@ import { Project } from "../models/Project.mjs";
 // TODO: Import placeholders for html, css, and js
 export const createProject = async (req, res) => {
   try {
-    const owner = req.params.username;
+    const owner = req.params.userId;
     const { name, description, html, css, js } = req.body;
 
     // Check if user is authenticated
@@ -12,8 +12,8 @@ export const createProject = async (req, res) => {
       return res.status(401).json({ message: "Access denied" });
     }
 
-    // Check if the username of the authenticated user matches the owner of the project
-    if (req.user.username !== owner) {
+    // Check if the email of the authenticated user matches the owner of the project
+    if (req.user.id !== owner) {
       return res.status(401).json({ message: "Access denied" });
     }
 
@@ -29,15 +29,15 @@ export const createProject = async (req, res) => {
 // Get all of the user's projects
 export const getProjects = async (req, res) => {
   try {
-    const owner = req.params.username;
+    const owner = req.params.userId;
 
     // Check if the user is authenticated
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "Access denied" });
     }
 
-    // Check if the username of the authenticated user matches the owner of the project
-    if (req.user.username !== owner) {
+    // Check if the id of the authenticated user matches the owner of the project
+    if (req.user.id !== owner) {
       return res.status(401).json({ message: "Access denied" });
     }
 
@@ -52,7 +52,7 @@ export const getProjects = async (req, res) => {
 // Get a project given its id
 export const getProject = async (req, res) => {
   try {
-    const owner = req.params.username;
+    const owner = req.params.userId;
     const projectId = req.params.projectId;
 
     // Check if the user is authenticated
@@ -60,8 +60,8 @@ export const getProject = async (req, res) => {
       return res.status(401).json({ message: "Access denied" });
     }
 
-    // Check if the username of the authenticated user matches the owner of the project
-    if (req.user.username !== owner) {
+    // Check if the email of the authenticated user matches the owner of the project
+    if (req.user.id !== owner) {
       return res.status(401).json({ message: "Access denied" });
     }
 
@@ -80,7 +80,7 @@ export const getProject = async (req, res) => {
 // Update a project given its id
 export const updateProject = async (req, res) => {
   try {
-    const owner = req.params.username;
+    const owner = req.params.userId;
     const projectId = req.params.projectId;
     const { name, description, html, css, js } = req.body;
 
@@ -98,7 +98,7 @@ export const updateProject = async (req, res) => {
     // TODO: Get list of collaborators of the project
 
     // TODO: Check if the authenticated user is the owner or a collaborator of the project
-    // if (req.user.username !== owner) {
+    // if (req.user.email !== owner) {
     //   return res.status(401).json({ message: "Access denied" });
     // }
 
@@ -120,7 +120,7 @@ export const updateProject = async (req, res) => {
 // Delete a project given its id
 export const deleteProject = async (req, res) => {
   try {
-    const owner = req.params.username;
+    const owner = req.params.userId;
     const projectId = req.params.projectId;
 
     // Check if the user is authenticated
@@ -128,8 +128,8 @@ export const deleteProject = async (req, res) => {
       return res.status(401).json({ message: "Access denied" });
     }
 
-    // Check if the username of the authenticated user matches the owner of the project
-    if (req.user.username !== owner) {
+    // Check if the id of the authenticated user matches the owner of the project
+    if (req.user.id !== owner) {
       return res.status(401).json({ message: "Access denied" });
     }
 
