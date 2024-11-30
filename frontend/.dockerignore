@@ -3,7 +3,7 @@
 **/.gitignore
 
 # docker
-Dockerfile
+Dockerfile.*
 *.dockerfile
 
 # node
@@ -12,9 +12,6 @@ Dockerfile
 
 # next.js
 .next
-
-# env
-.env
 
 # other
 README.md

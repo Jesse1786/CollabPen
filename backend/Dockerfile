@@ -4,6 +4,7 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY package*.json /app
 RUN npm install
+COPY .env /app
 COPY . /app
 
 FROM node:18-slim AS main

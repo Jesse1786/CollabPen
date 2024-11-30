@@ -2,7 +2,7 @@ import "dotenv/config";
 import passport from "passport";
 
 const FRONTEND_URL =
-  process.env.ENV == "prod"
+  process.env.ENV === "prod"
     ? process.env.FRONTEND_URL || "http://localhost:3000"
     : "http://localhost:3000";
 

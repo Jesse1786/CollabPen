@@ -3,7 +3,7 @@
 **/.gitignore
 
 # docker
-Dockerfile
+Dockerfile.*
 *.dockerfile
 
 # node
@@ -11,7 +11,7 @@ Dockerfile
 **/node_modules
 
 # env
-.env
+**/.env
 
 # other
 **/README.md
