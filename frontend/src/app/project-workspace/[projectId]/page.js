@@ -53,7 +53,7 @@ export default function ProjectWorkspace() {
 
   useEffect(() => {
     if (!loading && user && projectId) {
-      // TODO: (high priority) Check to see if the user is the owner of a collaborator of the project. If they are not, redirect them to the dashboard
+      // TODO: (high priority) Check to see if the user is the owner or a collaborator of the project. If they are not, redirect them to the dashboard
       // I probably need to set up a new state called authorized or something to prevent content from rendering in the meantime
 
       // TODO: Fix bug with the connection error message. Everything works but I need to figure out what it is

@@ -35,7 +35,7 @@ export const logout = async () => {
   });
 };
 
-export const googleLogin = async () => {
+export const googleLogin = () => {
   window.location.href = `${BACKEND_URL}/api/auth/google`;
 };
 
