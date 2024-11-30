@@ -34,7 +34,7 @@ export default function ProjectPanel() {
 
   // Get the user's projects from db and update the display
   const fetchProjects = async () => {
-    const response = await getUserProjects(user);
+    const response = await getUserProjects(user.id);
     const data = await response.json();
     setProjects(data);
   };
@@ -47,7 +47,7 @@ export default function ProjectPanel() {
   }, [loading, user]);
 
   const handleDelete = async (id) => {
-    const response = await deleteUserProject(user, id);
+    const response = await deleteUserProject(user.id, id);
     if (response.ok) {
       fetchProjects();
     }
@@ -67,7 +67,7 @@ export default function ProjectPanel() {
   };
 
   const handleAddProject = async () => {
-    const response = await addUserProject(user, name, description);
+    const response = await addUserProject(user.id, name, description);
     if (response.ok) {
       fetchProjects(); // Refresh the project list
       handleClose(); // Close the popup form

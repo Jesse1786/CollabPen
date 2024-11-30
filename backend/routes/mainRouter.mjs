@@ -7,6 +7,6 @@ const mainRouter = express.Router();
 
 mainRouter.use("/users", usersRouter);
 mainRouter.use("/auth", authRouter);
-mainRouter.use("/users/:username/projects", projectsRouter);
+mainRouter.use("/users/:userId/projects", projectsRouter);
 
 export default mainRouter;
