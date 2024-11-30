@@ -13,6 +13,7 @@ import EditorCSS from "@/components/EditorCSS/EditorCSS";
 import EditorJS from "@/components/EditorJS/EditorJS";
 import Preview from "@/components/Preview/Preview";
 import Navbar from "@/components/Navbar/Navbar";
+import { getUserProject, updateUserProject } from "@/services/api";
 
 /* 
 Docs: 
@@ -100,9 +101,26 @@ export default function ProjectWorkspace() {
 
       setIsSynced(true);
 
+      // Periodically save the Yjs document to the database
+      const intervalId = setInterval(async () => {
+        try {
+          const serializedYDoc = JSON.stringify({
+            html: yHtml.toString(),
+            css: yCss.toString(),
+            js: yJs.toString(),
+          });
+          
+          await updateUserProject(user.id, projectId, serializedYDoc);
+          console.log("Saved the document!")
+        } catch (error) {
+          console.error("Error saving Yjs document:", error);
+        }
+      }, 3000); // Save every 3 seconds
+
       return () => {
         provider.disconnect();
         ydoc.destroy();
+        clearInterval(intervalId);
       };
     }
   }, [user, loading, projectId]);

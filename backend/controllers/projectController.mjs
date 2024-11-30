@@ -1,11 +1,12 @@
 import { Project } from "../models/Project.mjs";
+import * as Y from "yjs";
 
 // Create a new project
 // TODO: Import placeholders for html, css, and js
 export const createProject = async (req, res) => {
   try {
     const owner = req.params.userId;
-    const { name, description, html, css, js } = req.body;
+    const { name, description } = req.body;
 
     // Check if user is authenticated
     if (!req.isAuthenticated()) {
@@ -17,7 +18,25 @@ export const createProject = async (req, res) => {
       return res.status(401).json({ message: "Access denied" });
     }
 
-    const project = new Project({ owner, name, description, html, css, js });
+    // Create a new ydoc and store it as a string
+    const ydoc = new Y.Doc();
+    ydoc.getText("html").insert(0, "");
+    ydoc.getText("css").insert(0, "");
+    ydoc.getText("js").insert(0, "");
+
+    const serializedYDoc = JSON.stringify({
+      html: ydoc.getText("html").toString(),
+      css: ydoc.getText("css").toString(),
+      js: ydoc.getText("js").toString(),
+    });
+
+    const project = new Project({
+      owner,
+      name,
+      description,
+      ydoc: serializedYDoc,
+    });
+
     await project.save();
 
     res.status(200).json(project);
@@ -60,10 +79,10 @@ export const getProject = async (req, res) => {
       return res.status(401).json({ message: "Access denied" });
     }
 
-    // Check if the email of the authenticated user matches the owner of the project
-    if (req.user.id !== owner) {
-      return res.status(401).json({ message: "Access denied" });
-    }
+    // TODO: Check if the email of the authenticated user matches the owner of the project or collaborator
+    // if (req.user.id !== owner) {
+    //   return res.status(401).json({ message: "Access denied" });
+    // }
 
     const project = await Project.findById(projectId);
 
@@ -71,7 +90,14 @@ export const getProject = async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    res.status(200).json(project);
+    // // Deserialize the string into a ydoc
+    // const data = JSON.parse(project.ydoc);
+    // const ydoc = new Y.Doc();
+    // ydoc.getText("html").insert(0, data.html || "");
+    // ydoc.getText("css").insert(0, data.css || "");
+    // ydoc.getText("js").insert(0, data.js || "");
+
+    res.status(200).json({ ydoc: project.ydoc });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -82,7 +108,7 @@ export const updateProject = async (req, res) => {
   try {
     const owner = req.params.userId;
     const projectId = req.params.projectId;
-    const { name, description, html, css, js } = req.body;
+    const { name, description, ydoc } = req.body;
 
     // Check if the user is authenticated
     if (!req.isAuthenticated()) {
@@ -105,9 +131,7 @@ export const updateProject = async (req, res) => {
     // All fields are optional
     project.name = name || project.name;
     project.description = description || project.description;
-    project.html = html || project.html;
-    project.css = css || project.css;
-    project.js = js || project.js;
+    project.ydoc = ydoc || project.ydoc;
 
     await project.save();
 

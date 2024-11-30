@@ -5,9 +5,7 @@ const projectSchema = new mongoose.Schema(
     owner: { type: String, required: true }, // Email of the project owner
     name: { type: String, required: true },
     description: { type: String, required: true },
-    html: { type: String, default: "" },
-    css: { type: String, default: "" },
-    js: { type: String, default: "" },
+    ydoc: { type: String, required: true },
   },
   { timestamps: true }
 );
