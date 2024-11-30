@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Container,
   Paper,
@@ -16,6 +17,8 @@ import { AppRegistration as Logo } from "@mui/icons-material";
 import { useAuth } from "@/context/AuthProvider";
 
 import { login, googleLogin } from "@/services/api";
+
+import googleLogo from "@/public/google-logo.webp";
 
 export default function Login() {
   const router = useRouter();
@@ -141,6 +144,13 @@ export default function Login() {
           onClick={googleLogin}
           sx={{ mt: 2 }}
         >
+          <Image
+            src={googleLogo}
+            alt="Google Logo"
+            width={24}
+            height={24}
+            style={{ marginRight: 6 }}
+          ></Image>
           Log In With Google
         </Button>
 
