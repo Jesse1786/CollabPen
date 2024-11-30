@@ -14,7 +14,7 @@ services:
 
   # y-websocket server
   y-websocket:
-    image: node:lts-slim
+    image: node:18-slim
     container_name: y-websocket
     working_dir: /app
     entrypoint: ["npx", "y-websocket"]

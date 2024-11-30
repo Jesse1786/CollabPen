@@ -1,11 +1,12 @@
-FROM node:lts-slim AS build
+FROM node:18-slim AS build
 
 RUN mkdir -p /app
 WORKDIR /app
-COPY . /app
+COPY package*.json /app
 RUN npm install
+COPY . /app
 
-FROM node:lts-slim AS main
+FROM node:18-slim AS main
 WORKDIR /app
 COPY --from=build /app /app
 EXPOSE 4000

@@ -3,12 +3,12 @@ import { User } from "../models/User.mjs";
 
 export const createUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: "Username already exists" });
+      return res.status(409).json({ message: "Email already exists" });
     }
 
     // Use bcrypt to hash the password
@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Store the hashed password
-    const user = new User({ username, email, password: hashedPassword });
+    const user = new User({ email, password: hashedPassword });
     await user.save();
 
     res.status(201).json(user);

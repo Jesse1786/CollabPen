@@ -3,27 +3,30 @@ import LocalStrategy from "passport-local";
 import bcrypt from "bcrypt";
 import { User } from "../models/User.mjs";
 
-
-// Passport takes care of the authentication process. 
+// Passport takes care of the authentication process.
 const setUpLocalStrategy = () => {
-  passport.use(new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await User.findOne({ username }).select("+password");
-      if (!user) {
-        return done(null, false);
-      }
+  passport.use(
+    new LocalStrategy(
+      { usernameField: "email" },
+      async (email, password, done) => {
+        try {
+          const user = await User.findOne({ email }).select("+password");
+          if (!user) {
+            return done(null, false);
+          }
 
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (!validPassword) {
-        return done(null, false);
-      }
+          const validPassword = await bcrypt.compare(password, user.password);
+          if (!validPassword) {
+            return done(null, false);
+          }
 
-      return done(null, user);
-    } catch (error) {
-      console.log(error);
-      return done(error);
-    }
-  }));
+          return done(null, user);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
 
   // Automatically runs after passport.authenticate('local') is called, unless a custom callback is provided
   // The user's id is serialized in: req.session.passport.user
@@ -41,6 +44,6 @@ const setUpLocalStrategy = () => {
       done(error);
     }
   });
-}
+};
 
 export default setUpLocalStrategy;

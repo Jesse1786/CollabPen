@@ -1,21 +1,27 @@
-import { Router } from 'express';
-import { createProject, getProjects, getProject, updateProject, deleteProject } from '../controllers/projectController.mjs';
+import { Router } from "express";
+import {
+  createProject,
+  getProjects,
+  getProject,
+  updateProject,
+  deleteProject,
+} from "../controllers/projectController.mjs";
 
 const projectsRouter = Router({ mergeParams: true });
 
-// POST /api/users/:username/projects
+// POST /api/users/:id/projects
 projectsRouter.post("/", createProject);
 
-// GET /api/users/:username/projects
+// GET /api/users/:id/projects
 projectsRouter.get("/", getProjects);
 
-// GET /api/users/:username/projects/:projectId
+// GET /api/users/:id/projects/:projectId
 projectsRouter.get("/:projectId", getProject);
 
-// PATCH /api/users/:username/projects/:projectId
+// PATCH /api/users/:id/projects/:projectId
 projectsRouter.patch("/:projectId", updateProject);
 
-// DELETE /api/users/:username/projects/:projectId
+// DELETE /api/users/:id/projects/:projectId
 projectsRouter.delete("/:projectId", deleteProject);
 
 export default projectsRouter;
