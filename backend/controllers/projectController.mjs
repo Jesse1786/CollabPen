@@ -1,5 +1,6 @@
 import { Project } from "../models/Project.mjs";
 import * as Y from "yjs";
+import { encode as base64Encode } from 'base64-arraybuffer';
 
 // Create a new project
 // TODO: Import placeholders for html, css, and js
@@ -24,17 +25,15 @@ export const createProject = async (req, res) => {
     ydoc.getText("css").insert(0, "");
     ydoc.getText("js").insert(0, "");
 
-    const serializedYDoc = JSON.stringify({
-      html: ydoc.getText("html").toString(),
-      css: ydoc.getText("css").toString(),
-      js: ydoc.getText("js").toString(),
-    });
+    const ydocUpdate = Y.encodeStateAsUpdate(ydoc);
+    // Convert the Uint8Array to a base64-encoded string to store in the database
+    const ydocBase64 = base64Encode(ydocUpdate);
 
     const project = new Project({
       owner,
       name,
       description,
-      ydoc: serializedYDoc,
+      ydoc: ydocBase64,
     });
 
     await project.save();
