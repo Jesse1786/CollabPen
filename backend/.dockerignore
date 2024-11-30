@@ -3,15 +3,12 @@
 **/.gitignore
 
 # docker
-Dockerfile
+Dockerfile.*
 *.dockerfile
 
 # node
 **/package-lock.json
 **/node_modules
-
-# env
-.env
 
 # other
 **/README.md

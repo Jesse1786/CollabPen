@@ -67,8 +67,6 @@ services:
     environment:
       - VIRTUAL_HOST=${FRONTEND_DOMAIN}
       - LETSENCRYPT_HOST=${FRONTEND_DOMAIN}
-    volumes:
-      - ${ENV_FRONTEND_PATH}:/app/.env
 
   # Express.js backend
   backend:
