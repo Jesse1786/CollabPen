@@ -4,7 +4,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function ProjectEntry({
-  id,
+  type,
   name,
   description,
   onDelete,
@@ -38,14 +38,16 @@ export default function ProjectEntry({
           {description}
         </Typography>
       </CardContent>
-      <Box>
-        <IconButton onClick={() => onGroupAction()}>
-          <GroupIcon />
-        </IconButton>
-        <IconButton onClick={() => onDelete()}>
-          <DeleteIcon />
-        </IconButton>
-      </Box>
+      {type === "personal" && (
+        <Box>
+          <IconButton onClick={() => onGroupAction()}>
+            <GroupIcon />
+          </IconButton>
+          <IconButton onClick={() => onDelete()}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      )}
     </Card>
   );
 }

@@ -64,7 +64,7 @@ export default function ProjectPanel() {
           alignItems: "center",
         }}
       >
-        <Typography variant="h4">Projects</Typography>
+        <Typography variant="h4">My Projects</Typography>
         <Button
           variant="contained"
           color="addButton"
@@ -78,7 +78,7 @@ export default function ProjectPanel() {
         {projects.map((project) => (
           <ProjectEntry
             key={project._id}
-            id={project._id}
+            type="personal"
             name={project.name}
             description={project.description}
             onDelete={() => handleDelete(project._id)}
