@@ -1,17 +1,5 @@
 import mongoose from "mongoose";
 
-const collaboratorSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    sharedAt: { type: Date, default: Date.now },
-  },
-  { _id: false }
-);
-
 const projectSchema = new mongoose.Schema(
   {
     owner: {
@@ -24,7 +12,12 @@ const projectSchema = new mongoose.Schema(
     html: { type: String, default: "" },
     css: { type: String, default: "" },
     js: { type: String, default: "" },
-    collaborators: [collaboratorSchema],
+    collaborators: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        sharedAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );

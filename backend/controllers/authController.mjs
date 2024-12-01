@@ -34,7 +34,7 @@ export const oauthGoogle = (req, res) => {
 export const oauthGoogleCallback = (req, res) => {
   passport.authenticate("google", (err, user) => {
     if (err) return res.status(500).json({ message: "Server error" });
-    if (!user) return res.status(401).json({ message: "Access denied" });
+    if (!user) return res.status(401).json({ message: "Unauthenticated" });
 
     req.logIn(user, (err) => {
       if (err) return res.status(500).json({ authenticated: false });

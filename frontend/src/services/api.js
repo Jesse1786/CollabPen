@@ -53,7 +53,7 @@ export const checkAuthenticated = async () => {
   });
 };
 
-export const addUserProject = async (userId, name, description) => {
+export const addProject = async (userId, name, description) => {
   return fetch(`${BACKEND_URL}/api/users/${userId}/projects`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -62,8 +62,34 @@ export const addUserProject = async (userId, name, description) => {
   });
 };
 
+export const addCollaborator = async (userId, projectId, email) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/collaborators`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email }),
+    }
+  );
+};
+
 export const getUserProjects = async (userId) => {
   return fetch(`${BACKEND_URL}/api/users/${userId}/projects`, {
+    method: "GET",
+    credentials: "include",
+  });
+};
+
+export const getSharedProjects = async (userId) => {
+  return fetch(`${BACKEND_URL}/api/users/${userId}/projects/shared`, {
+    method: "GET",
+    credentials: "include",
+  });
+};
+
+export const getProject = async (userId, projectId) => {
+  return fetch(`${BACKEND_URL}/api/users/${userId}/projects/${projectId}`, {
     method: "GET",
     credentials: "include",
   });

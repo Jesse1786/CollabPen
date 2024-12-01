@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Box,
-  Button,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import ProjectEntry from "../ProjectEntry/ProjectEntry";
+import AddProjectForm from "../AddProjectForm/AddProjectForm";
+import AddCollaboratorForm from "../AddCollaboratorForm/AddCollaboratorForm";
+
 import { useAuth } from "@/context/AuthProvider";
 
-import {
-  addUserProject,
-  getUserProjects,
-  deleteUserProject,
-} from "@/services/api";
+import { getUserProjects, deleteUserProject } from "@/services/api";
 
 // Docs: https://mui.com/material-ui/react-dialog/
 export default function ProjectPanel() {
@@ -28,9 +18,11 @@ export default function ProjectPanel() {
   const [projects, setProjects] = useState([]);
 
   // Used for the add project pop-up form
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [projectFormOpen, setProjectFormOpen] = useState(false);
+
+  // Used for the add collaborator pop-up form
+  const [collaboratorFormOpen, setCollaboratorFormOpen] = useState(false);
+  const [projectId, setProjectId] = useState("");
 
   // Get the user's projects from db and update the display
   const fetchProjects = async () => {
@@ -53,25 +45,9 @@ export default function ProjectPanel() {
     }
   };
 
-  // TODO: (med priority) Let user add others to a project. Also refactor project backend to track collaborators
-  const handleGroupAction = async () => {
-    console.log("Feature to add collaborators coming soon...");
-  };
-
-  // Add project pop-up form handlers
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setName("");
-    setDescription("");
-  };
-
-  const handleAddProject = async () => {
-    const response = await addUserProject(user.id, name, description);
-    if (response.ok) {
-      fetchProjects(); // Refresh the project list
-      handleClose(); // Close the popup form
-    }
+  const handleGroupAction = async (id) => {
+    setProjectId(id);
+    setCollaboratorFormOpen(true);
   };
 
   // TODO: (med priority) Only allow the user to have x amount of projects unless they are a premium user
@@ -89,7 +65,11 @@ export default function ProjectPanel() {
         }}
       >
         <Typography variant="h4">Projects</Typography>
-        <Button variant="contained" color="addButton" onClick={handleOpen}>
+        <Button
+          variant="contained"
+          color="addButton"
+          onClick={() => setProjectFormOpen(true)}
+        >
           <AddIcon sx={{ fontSize: 18, marginRight: "2px" }} />
           New project
         </Button>
@@ -102,48 +82,23 @@ export default function ProjectPanel() {
             name={project.name}
             description={project.description}
             onDelete={() => handleDelete(project._id)}
-            onGroupAction={() => handleGroupAction()}
+            onGroupAction={() => handleGroupAction(project._id)}
             onClick={() => router.push(`/project-workspace/${project._id}`)}
           />
         ))}
       </Box>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Project</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Project Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            label="Project Description"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions sx={{ pb: 3, pr: 3 }}>
-          <Button onClick={handleClose} color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleAddProject}
-            color="addButton"
-            variant="contained"
-          >
-            Add Project
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AddProjectForm
+        user={user}
+        open={projectFormOpen}
+        setOpen={setProjectFormOpen}
+        fetchProjects={fetchProjects}
+      />
+      <AddCollaboratorForm
+        user={user}
+        projectId={projectId}
+        open={collaboratorFormOpen}
+        setOpen={setCollaboratorFormOpen}
+      />
     </>
   );
 }

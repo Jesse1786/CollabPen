@@ -1,11 +1,12 @@
 import { Project } from "../models/Project.mjs";
+import { User } from "../models/User.mjs";
 
 const MAX_COLLABORATORS = 5;
 
 // Check if the user is a collaborator of the project
 const isCollaborator = (project, userId) => {
   return project.collaborators.some(
-    (collaborator) => collaborator.user.toString() === userId.toString()
+    (collaborator) => collaborator.user.toString() === userId
   );
 };
 
@@ -13,7 +14,7 @@ const isCollaborator = (project, userId) => {
 // TODO: Import placeholders for html, css, and js
 export const createProject = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const owner = req.params.userId;
     const { name, description, html, css, js } = req.body;
 
     // Check if user is authenticated
@@ -21,7 +22,7 @@ export const createProject = async (req, res) => {
       return res.status(401).json({ message: "Unauthenticated" });
     }
 
-    // Check if the email of the authenticated user matches the userId
+    // Check if the email of the authenticated user matches the owner
     if (req.user.id !== owner) {
       return res.status(403).json({ message: "Access denied" });
     }
@@ -35,8 +36,8 @@ export const createProject = async (req, res) => {
   }
 };
 
-// Share a project with another user
-export const shareProject = async (req, res) => {
+// Add a collaborator to a project
+export const addCollaborator = async (req, res) => {
   try {
     const userId = req.params.userId;
     const projectId = req.params.projectId;
@@ -73,17 +74,17 @@ export const shareProject = async (req, res) => {
     }
 
     // Check if the user is the owner
-    if (project.owner !== userId) {
+    if (project.owner.toString() !== userId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
     // Check that the collaborator is not the owner
-    if (collaborator._id === userId) {
+    if (collaborator._id.toString() === userId) {
       return res.status(409).json({ message: "Cannot share with owner" });
     }
 
-    // Check if the collaboratorId is already a collaborator of the project
-    if (isCollaborator(project, collaborator._id)) {
+    // Check if the collaborator is already a collaborator of the project
+    if (isCollaborator(project, collaborator._id.toString())) {
       return res.status(409).json({ message: "Already a collaborator" });
     }
 
@@ -98,6 +99,7 @@ export const shareProject = async (req, res) => {
       user: collaborator._id,
       sharedAt: new Date(),
     });
+
     await project.save();
 
     res.status(200).json("Project shared successfully");
@@ -179,7 +181,10 @@ export const getProject = async (req, res) => {
     }
 
     // Check if the user is the owner or a collaborator of the project
-    if (project.owner !== userId && !isCollaborator(project, userId)) {
+    if (
+      project.owner.toString() !== userId &&
+      !isCollaborator(project, userId)
+    ) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -192,7 +197,7 @@ export const getProject = async (req, res) => {
 // Update a project given its id
 export const updateProject = async (req, res) => {
   try {
-    const owner = req.params.userId;
+    const userId = req.params.userId;
     const projectId = req.params.projectId;
     const { name, description, html, css, js } = req.body;
 
@@ -208,7 +213,10 @@ export const updateProject = async (req, res) => {
     }
 
     // Check if the user is the owner or a collaborator of the project
-    if (project.owner !== userId && !isCollaborator(project, userId)) {
+    if (
+      project.owner.toString() !== userId &&
+      !isCollaborator(project, userId)
+    ) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -257,7 +265,7 @@ export const deleteProject = async (req, res) => {
     }
 
     // Check if the user is the owner
-    if (project.owner !== userId) {
+    if (project.owner.toString() !== userId) {
       return res.status(403).json({ message: "Access denied" });
     }
 

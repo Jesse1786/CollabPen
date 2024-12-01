@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   createProject,
-  shareProject,
+  addCollaborator,
   getProjects,
   getProject,
   getSharedProjects,
@@ -14,8 +14,8 @@ const projectsRouter = Router({ mergeParams: true });
 // POST /api/users/:id/projects
 projectsRouter.post("/", createProject);
 
-// POST /api/users/:id/projects/share
-projectsRouter.post("/share", shareProject);
+// POST /api/users/:id/projects/:projectId/collaborators
+projectsRouter.post("/:projectId/collaborators", addCollaborator);
 
 // GET /api/users/:id/projects
 projectsRouter.get("/", getProjects);
