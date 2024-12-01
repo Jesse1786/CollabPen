@@ -1,8 +1,10 @@
 import { Router } from "express";
 import {
   createProject,
+  addCollaborator,
   getProjects,
   getProject,
+  getSharedProjects,
   updateProject,
   deleteProject,
 } from "../controllers/projectController.mjs";
@@ -12,8 +14,14 @@ const projectsRouter = Router({ mergeParams: true });
 // POST /api/users/:id/projects
 projectsRouter.post("/", createProject);
 
+// POST /api/users/:id/projects/:projectId/collaborators
+projectsRouter.post("/:projectId/collaborators", addCollaborator);
+
 // GET /api/users/:id/projects
 projectsRouter.get("/", getProjects);
+
+// Get /api/users/:id/projects/shared
+projectsRouter.get("/shared", getSharedProjects);
 
 // GET /api/users/:id/projects/:projectId
 projectsRouter.get("/:projectId", getProject);

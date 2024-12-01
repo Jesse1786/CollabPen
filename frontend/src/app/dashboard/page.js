@@ -17,6 +17,7 @@ import {
 import { useAuth } from "@/context/AuthProvider";
 import Navbar from "@/components/Navbar/Navbar";
 import ProjectPanel from "@/components/ProjectPanel/ProjectPanel";
+import SharedProjectPanel from "@/components/SharedProjectPanel/SharedProjectPanel";
 
 // Docs: https://mui.com/material-ui/react-tabs/
 function TabPanel(props) {
@@ -129,7 +130,8 @@ export default function Dashboard() {
                 },
               }}
             >
-              <Tab label="Projects" sx={{ fontSize: "1rem" }} />
+              <Tab label="My Projects" sx={{ fontSize: "1rem" }} />
+              <Tab label="Shared Projects" sx={{ fontSize: "1rem" }} />
               <Tab label="Payment" sx={{ fontSize: "1rem" }} />
               <Tab label="Settings" sx={{ fontSize: "1rem" }} />
             </Tabs>
@@ -140,9 +142,12 @@ export default function Dashboard() {
               <ProjectPanel />
             </TabPanel>
             <TabPanel value={tabIndex} index={1}>
-              Payment page coming soon...
+              <SharedProjectPanel />
             </TabPanel>
             <TabPanel value={tabIndex} index={2}>
+              Payment page coming soon...
+            </TabPanel>
+            <TabPanel value={tabIndex} index={3}>
               Settings page coming soon...
             </TabPanel>
           </RightSection>
