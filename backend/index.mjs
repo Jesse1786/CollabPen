@@ -34,13 +34,15 @@ connectDB();
 app.use(express.json());
 app.use(cors(corsOptions));
 
-// TODO: (low priority) Add security features such as HttpOnly, Secure, SameSite. But first get MVP working.
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     cookie: {
+      secure: process.env.ENV === "prod",
+      httpOnly: true,
+      sameSite: "strict",
       maxAge: 1000 * 60 * 60 * 24,
     },
   })
