@@ -1,3 +1,5 @@
+import * as Y from "yjs";
+import { encode as base64Encode } from 'base64-arraybuffer';
 import { Project } from "../models/Project.mjs";
 import { User } from "../models/User.mjs";
 
@@ -15,7 +17,7 @@ const isCollaborator = (project, userId) => {
 export const createProject = async (req, res) => {
   try {
     const owner = req.params.userId;
-    const { name, description, html, css, js } = req.body;
+    const { name, description } = req.body;
 
     // Check if user is authenticated
     if (!req.isAuthenticated()) {
@@ -27,7 +29,23 @@ export const createProject = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    const project = new Project({ owner, name, description, html, css, js });
+    // Create a new ydoc and store it as a string
+    const ydoc = new Y.Doc();
+    ydoc.getText("html").insert(0, "");
+    ydoc.getText("css").insert(0, "");
+    ydoc.getText("js").insert(0, "");
+
+    const ydocUpdate = Y.encodeStateAsUpdate(ydoc);
+    // Convert the Uint8Array to a base64-encoded string to store in the database
+    const ydocBase64 = base64Encode(ydocUpdate);
+
+    const project = new Project({
+      owner,
+      name,
+      description,
+      ydoc: ydocBase64,
+    });
+
     await project.save();
 
     res.status(200).json(project);
@@ -189,6 +207,15 @@ export const getProject = async (req, res) => {
     }
 
     res.status(200).json(project);
+
+    // // Deserialize the string into a ydoc
+    // const data = JSON.parse(project.ydoc);
+    // const ydoc = new Y.Doc();
+    // ydoc.getText("html").insert(0, data.html || "");
+    // ydoc.getText("css").insert(0, data.css || "");
+    // ydoc.getText("js").insert(0, data.js || "");
+
+    res.status(200).json({ ydoc: project.ydoc });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -199,7 +226,7 @@ export const updateProject = async (req, res) => {
   try {
     const userId = req.params.userId;
     const projectId = req.params.projectId;
-    const { name, description, html, css, js } = req.body;
+    const { name, description, ydoc } = req.body;
 
     // Check if the user is authenticated
     if (!req.isAuthenticated()) {
@@ -230,9 +257,7 @@ export const updateProject = async (req, res) => {
     // All fields are optional
     project.name = name || project.name;
     project.description = description || project.description;
-    project.html = html || project.html;
-    project.css = css || project.css;
-    project.js = js || project.js;
+    project.ydoc = ydoc || project.ydoc;
 
     await project.save();
 

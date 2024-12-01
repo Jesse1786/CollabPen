@@ -26,6 +26,7 @@ jobs:
 
       - name: Build frontend image
         run: |
+          echo "${{ secrets.FRONTEND_ENV }}" > .env
           docker build -t $FRONTEND_IMAGE .
 
       - name: Push frontend image to Docker Hub

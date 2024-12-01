@@ -9,15 +9,13 @@ const projectSchema = new mongoose.Schema(
     }, // User id of the project owner
     name: { type: String, required: true },
     description: { type: String, required: true },
-    html: { type: String, default: "" },
-    css: { type: String, default: "" },
-    js: { type: String, default: "" },
     collaborators: [
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         sharedAt: { type: Date, default: Date.now },
       },
     ],
+    ydoc: { type: String, required: true }, // Stores a base64-encoded string
   },
   { timestamps: true }
 );
