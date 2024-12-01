@@ -9,7 +9,7 @@ import AddCollaboratorForm from "../AddCollaboratorForm/AddCollaboratorForm";
 
 import { useAuth } from "@/context/AuthProvider";
 
-import { getUserProjects, deleteUserProject } from "@/services/api";
+import { getUserProjects, deleteProject } from "@/services/api";
 
 // Docs: https://mui.com/material-ui/react-dialog/
 export default function ProjectPanel() {
@@ -39,7 +39,7 @@ export default function ProjectPanel() {
   }, [loading, user]);
 
   const handleDelete = async (id) => {
-    const response = await deleteUserProject(user.id, id);
+    const response = await deleteProject(user.id, id);
     if (response.ok) {
       fetchProjects();
     }

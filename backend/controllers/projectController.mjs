@@ -1,5 +1,5 @@
 import * as Y from "yjs";
-import { encode as base64Encode } from 'base64-arraybuffer';
+import { encode as base64Encode } from "base64-arraybuffer";
 import { Project } from "../models/Project.mjs";
 import { User } from "../models/User.mjs";
 
@@ -187,8 +187,8 @@ export const getProject = async (req, res) => {
       return res.status(401).json({ message: "Unauthenticated" });
     }
 
-    // Check if the email of the authenticated user matches the userId
-    if (req.user.id !== owner) {
+    // Check if the id of the authenticated user matches the userId
+    if (req.user.id !== userId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -205,15 +205,6 @@ export const getProject = async (req, res) => {
     ) {
       return res.status(403).json({ message: "Access denied" });
     }
-
-    res.status(200).json(project);
-
-    // // Deserialize the string into a ydoc
-    // const data = JSON.parse(project.ydoc);
-    // const ydoc = new Y.Doc();
-    // ydoc.getText("html").insert(0, data.html || "");
-    // ydoc.getText("css").insert(0, data.css || "");
-    // ydoc.getText("js").insert(0, data.js || "");
 
     res.status(200).json({ ydoc: project.ydoc });
   } catch (error) {
@@ -246,13 +237,6 @@ export const updateProject = async (req, res) => {
     ) {
       return res.status(403).json({ message: "Access denied" });
     }
-
-    // TODO: Get list of collaborators of the project
-
-    // TODO: Check if the authenticated user is the owner or a collaborator of the project
-    // if (req.user.email !== owner) {
-    //   return res.status(401).json({ message: "Access denied" });
-    // }
 
     // All fields are optional
     project.name = name || project.name;

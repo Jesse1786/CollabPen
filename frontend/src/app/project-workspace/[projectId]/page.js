@@ -5,7 +5,7 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { useParams, useRouter } from "next/navigation";
 import { Grid2 as Grid, Box } from "@mui/material";
-import { encode as base64Encode } from 'base64-arraybuffer';
+import { encode as base64Encode } from "base64-arraybuffer";
 
 import { getRandomColour } from "@/utils/colors";
 import { useAuth } from "@/context/AuthProvider";
@@ -14,7 +14,7 @@ import EditorCSS from "@/components/EditorCSS/EditorCSS";
 import EditorJS from "@/components/EditorJS/EditorJS";
 import Preview from "@/components/Preview/Preview";
 import Navbar from "@/components/Navbar/Navbar";
-import { getUserProject, updateUserProject } from "@/services/api";
+import { getProject, updateProject } from "@/services/api";
 
 /* 
 Docs: 
@@ -75,7 +75,7 @@ export default function ProjectWorkspace() {
       // Fetch the project data and set up Y.Doc and provider
       const setupYDoc = async () => {
         // Fetch the project data from the backend
-        const response = await getUserProject(user.id, projectId);
+        const response = await getProject(user.id, projectId);
         const data = await response.json();
 
         // Create our local ydoc
@@ -133,7 +133,7 @@ export default function ProjectWorkspace() {
           // Convert the Uint8Array to a base64-encoded string
           const ydocBase64 = base64Encode(ydocUpdate);
 
-          await updateUserProject(user.id, projectId, ydocBase64);
+          await updateProject(user.id, projectId, ydocBase64);
         }, 3000); // Save every 3 seconds
       };
 
