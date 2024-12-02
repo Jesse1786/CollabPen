@@ -216,6 +216,7 @@ export default function ProjectWorkspace() {
               display: "flex",
               flexDirection: "row",
               flexGrow: 1,
+              maxHeight: "500px",       
             }}
           >
             <WorkspaceToolbar user={user} projectId={projectId} />
