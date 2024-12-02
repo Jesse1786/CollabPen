@@ -13,7 +13,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { v4 as uuidv4 } from "uuid";
 
-import { processQuery, getChatHistory } from "@/services/api";
+import { processQuery, getJobStatus, getChatHistory } from "@/services/api";
 
 function UserMessage({ message }) {
   return (
@@ -95,8 +95,12 @@ function AssistantMessage({ message }) {
 export default function ChatBot({ user, projectId }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [jobId, setJobId] = useState("");
   const [fetchError, setFetchError] = useState(false);
   const [processing, setProcessing] = useState(false);
+
+  // Polling interval for checking job status
+  const POLLING_INTERVAL = 3000;
 
   useEffect(() => {
     const fetchChatHistory = async () => {
@@ -126,6 +130,54 @@ export default function ChatBot({ user, projectId }) {
     fetchChatHistory();
   }, []);
 
+  useEffect(() => {
+    if (jobId === "") {
+      return;
+    }
+
+    let interval;
+
+    // Poll the job status until it is completed or an error occurs
+    const jobStatus = async () => {
+      try {
+        const response = await getJobStatus(user.id, projectId, jobId);
+        if (response.ok) {
+          const data = await response.json();
+          // If the job is completed, add the assistant's response to the chat
+          if (data.status === "completed") {
+            setMessages((prevState) => [
+              ...prevState,
+              {
+                id: uuidv4(),
+                role: "assistant",
+                content: data.response,
+              },
+            ]);
+            setJobId("");
+            setProcessing(false);
+            clearInterval(interval);
+          }
+        } else {
+          setFetchError(true);
+          setProcessing(false);
+          clearInterval(interval);
+        }
+      } catch {
+        setFetchError(true);
+        setProcessing(false);
+        clearInterval(interval);
+      }
+    };
+
+    if (jobId !== "") {
+      interval = setInterval(jobStatus, POLLING_INTERVAL);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [jobId]);
+
   const handleSend = async () => {
     if (input.trim()) {
       setInput("");
@@ -141,23 +193,16 @@ export default function ChatBot({ user, projectId }) {
       // Disable input while processing
       setProcessing(true);
 
-      const response = await processQuery(user.id, projectId, input);
-      if (response.ok) {
-        const data = await response.json();
-        setMessages((prevState) => [
-          ...prevState,
-          {
-            id: uuidv4(),
-            role: "assistant",
-            content: data.response,
-          },
-        ]);
-      } else {
+      try {
+        const response = await processQuery(user.id, projectId, input);
+        if (response.ok) {
+          const { jobId } = await response.json();
+          setJobId(jobId);
+        }
+      } catch (error) {
         setFetchError(true);
+        setProcessing(false);
       }
-
-      // Re-enable input after processing
-      setProcessing(false);
     }
   };
 

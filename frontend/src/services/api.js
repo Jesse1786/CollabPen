@@ -123,6 +123,16 @@ export const processQuery = async (userId, projectId, query) => {
   );
 };
 
+export const getJobStatus = async (userId, projectId, jobId) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/chat/jobs/${jobId}`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+};
+
 export const getChatHistory = async (userId, projectId) => {
   return fetch(
     `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/chat`,
