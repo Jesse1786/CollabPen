@@ -61,12 +61,10 @@ services:
     image: redis:7.2-alpine
     container_name: redis
     restart: always
-    environment:
-      - REDIS_HOST=redis
     expose:
       - 6379
     volumes:
-      - ./redis:/data
+      - ./redis-data:/data
 
   # Next.js frontend
   frontend:
@@ -90,8 +88,10 @@ services:
     restart: always
     depends_on:
       - db
+      - redis
     environment:
       - MONGO_HOST=db
+      - REDIS_HOST=redis
       - VIRTUAL_HOST=${BACKEND_DOMAIN}
       - LETSENCRYPT_HOST=${BACKEND_DOMAIN}
     volumes:
