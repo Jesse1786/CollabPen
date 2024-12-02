@@ -14,11 +14,16 @@ new Worker(
   async (job) => {
     const { userId, projectId, query, messages } = job.data;
 
+    const llmMessages = messages.map(({ role, content }) => ({
+      role,
+      content,
+    }));
+
+    llmMessages.push({ role: "user", content: query });
+
     try {
       // Invoke the LLM with the chat messages
-      const response = await llm.invoke(
-        messages.map(({ role, content }) => ({ role, content }))
-      );
+      const response = await llm.invoke(llmMessages);
 
       if (!response) {
         const payload = { message: "LLM response is empty" };
@@ -63,6 +68,7 @@ new Worker(
 
       return payload;
     } catch (error) {
+      console.log(error);
       const payload = { message: "Server error" };
       await redisClient.set(
         `chat:${userId}:${projectId}:${job.id}`,
@@ -181,7 +187,6 @@ export const getJobStatus = async (req, res) => {
       res.status(202).json({ status: "processing" });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Server error" });
   }
 };
