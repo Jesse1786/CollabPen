@@ -1,6 +1,7 @@
 export const htmlPlaceholder = `<h1>CollabPen Demo</h1>
-<h2 id="myMsg">Try clicking the button!</h2>
-<button id="myBtn" onclick="updateText()">Click me!</button>`;
+<h2 id="myMsg">Counter: 0</h2>
+<button id="myBtn">Click me!</button>
+`;
 
 export const cssPlaceholder = `body {
   background-color: #1e1e1e; 
@@ -17,7 +18,16 @@ export const cssPlaceholder = `body {
   font-weight: bold;
 }`;
 
-export const jsPlaceholder = `function updateText() {
+export const jsPlaceholder = `let counter = 0;
+
+function incrementCounter() {
+  counter++; // Increment the counter
   const msg = document.querySelector("#myMsg");
-  msg.innerHTML = "This is so cool!";
-}`;
+  msg.innerHTML = \`Counter: \${counter}\`; // Update the counter display
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.querySelector("#myBtn");
+  button.addEventListener("click", incrementCounter);
+});
+`;
