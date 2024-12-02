@@ -75,7 +75,7 @@ function TabIndexSetter(props) {
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (tab === "account") {
-      setTabIndex(2);
+      setTabIndex(3);
       router.replace("/dashboard");
     }
   }, [setTabIndex, router, searchParams]);
