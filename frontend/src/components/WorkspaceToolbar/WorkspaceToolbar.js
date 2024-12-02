@@ -36,6 +36,7 @@ export default function WorkspaceToolbar({ user, projectId }) {
           display: "flex",
           flexDirection: "column",
           borderRight: "1px solid",
+          borderBottom: "1px solid",
           borderColor: "divider",
           gap: "10px",
           padding: "10px",
@@ -70,6 +71,7 @@ export default function WorkspaceToolbar({ user, projectId }) {
             padding: "20px",
             overflow: "auto",
             borderRight: "1px solid",
+            borderBottom: "1px solid",
             borderColor: "divider",
           }}
         >
