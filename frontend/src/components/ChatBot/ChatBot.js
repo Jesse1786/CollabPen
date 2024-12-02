@@ -1,23 +1,17 @@
 import { useState, useEffect } from "react";
 import {
-  Drawer,
   IconButton,
   Box,
   Typography,
-  TextField,
-  Button,
   InputAdornment,
   FormControl,
   OutlinedInput,
-  InputLabel,
 } from "@mui/material";
-import ChatIcon from "@mui/icons-material/Chat";
 import SendIcon from "@mui/icons-material/Send";
+import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { v4 as uuidv4 } from "uuid";
-
-import ReactMarkdown from "react-markdown";
 
 import { processQuery, getChatHistory } from "@/services/api";
 

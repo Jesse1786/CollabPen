@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Typography, Tooltip, IconButton } from "@mui/material";
+import { Box, Tooltip, IconButton } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 
 import ChatBot from "../ChatBot/ChatBot";
