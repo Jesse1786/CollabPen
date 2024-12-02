@@ -12,22 +12,16 @@ new Worker(
   async (job) => {
     const { userId, projectId, query, messages } = job.data;
 
-    const botContent = "Hey there!";
+    const llmMessages = messages.map(({ role, content }) => ({
+      role,
+      content,
+    }));
 
-    await redisClient.set(
-      `chat:${userId}:${projectId}:${job.id}`,
-      botContent,
-      "EX",
-      3600
-    ); // Cache for 1 hour
-
-    return { response: botContent };
+    llmMessages.push({ role: "user", content: query });
 
     try {
       // Invoke the LLM with the chat messages
-      const response = await llm.invoke(
-        messages.map(({ role, content }) => ({ role, content }))
-      );
+      const response = await llm.invoke(llmMessages);
 
       if (!response) {
         throw new Error("LLM response is empty");
