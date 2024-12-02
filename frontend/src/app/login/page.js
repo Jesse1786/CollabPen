@@ -151,7 +151,7 @@ export default function Login() {
             height={24}
             style={{ marginRight: 6 }}
           ></Image>
-          Log In With Google
+          Continue With Google
         </Button>
 
         <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>

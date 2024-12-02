@@ -38,7 +38,7 @@ const setUpLocalStrategy = () => {
   // The user object is deserialized in: req.user
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await User.findOne({ _id: id });
+      const user = await User.findById(id);
       done(null, user);
     } catch (error) {
       done(error);

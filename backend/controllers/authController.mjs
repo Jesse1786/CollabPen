@@ -11,7 +11,7 @@ const FRONTEND_URL =
 export const loginUser = (req, res) => {
   passport.authenticate("local", (err, user) => {
     if (err) return res.status(500).json({ message: "Server error" });
-    if (!user) return res.status(401).json({ message: "Access denied" });
+    if (!user) return res.status(401).json({ message: "Unauthenticated" });
 
     // Need to call req.logIn manually since we are using a custom callback
     // This serializes the user's id in req.session.passport.user
@@ -34,7 +34,7 @@ export const oauthGoogle = (req, res) => {
 export const oauthGoogleCallback = (req, res) => {
   passport.authenticate("google", (err, user) => {
     if (err) return res.status(500).json({ message: "Server error" });
-    if (!user) return res.status(401).json({ message: "Access denied" });
+    if (!user) return res.status(401).json({ message: "Unauthenticated" });
 
     req.logIn(user, (err) => {
       if (err) return res.status(500).json({ authenticated: false });
@@ -65,6 +65,6 @@ export const checkAuth = (req, res) => {
       id: req.user._id,
     });
   } else {
-    res.status(401).json({ authenticated: false });
+    res.status(200).json({ authenticated: false });
   }
 };

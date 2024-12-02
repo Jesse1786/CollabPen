@@ -35,7 +35,7 @@ export const logout = async () => {
   });
 };
 
-export const googleLogin = async () => {
+export const googleLogin = () => {
   window.location.href = `${BACKEND_URL}/api/auth/google`;
 };
 
@@ -53,13 +53,25 @@ export const checkAuthenticated = async () => {
   });
 };
 
-export const addUserProject = async (userId, name, description) => {
+export const addProject = async (userId, name, description) => {
   return fetch(`${BACKEND_URL}/api/users/${userId}/projects`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
     body: JSON.stringify({ name, description }),
   });
+};
+
+export const addCollaborator = async (userId, projectId, email) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/collaborators`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email }),
+    }
+  );
 };
 
 export const getUserProjects = async (userId) => {
@@ -69,9 +81,64 @@ export const getUserProjects = async (userId) => {
   });
 };
 
-export const deleteUserProject = async (userId, id) => {
+export const getSharedProjects = async (userId) => {
+  return fetch(`${BACKEND_URL}/api/users/${userId}/projects/shared`, {
+    method: "GET",
+    credentials: "include",
+  });
+};
+
+export const getProject = async (userId, projectId) => {
+  return fetch(`${BACKEND_URL}/api/users/${userId}/projects/${projectId}`, {
+    method: "GET",
+    credentials: "include",
+  });
+};
+
+export const updateProject = async (userId, id, ydoc) => {
+  return fetch(`${BACKEND_URL}/api/users/${userId}/projects/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ ydoc }),
+  });
+};
+
+export const deleteProject = async (userId, id) => {
   return fetch(`${BACKEND_URL}/api/users/${userId}/projects/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
+};
+
+export const processQuery = async (userId, projectId, query) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/chat`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ query }),
+    }
+  );
+};
+
+export const getJobStatus = async (userId, projectId, jobId) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/chat/jobs/${jobId}`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+};
+
+export const getChatHistory = async (userId, projectId) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/chat`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
 };
