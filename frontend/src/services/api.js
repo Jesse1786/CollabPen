@@ -110,3 +110,25 @@ export const deleteProject = async (userId, id) => {
     credentials: "include",
   });
 };
+
+export const processQuery = async (userId, projectId, query) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/chat`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ query }),
+    }
+  );
+};
+
+export const getChatHistory = async (userId, projectId) => {
+  return fetch(
+    `${BACKEND_URL}/api/users/${userId}/projects/${projectId}/chat`,
+    {
+      method: "GET",
+      credentials: "include",
+    }
+  );
+};
