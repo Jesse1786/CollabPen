@@ -14,6 +14,9 @@ import EditorCSS from "@/components/EditorCSS/EditorCSS";
 import EditorJS from "@/components/EditorJS/EditorJS";
 import Preview from "@/components/Preview/Preview";
 import Navbar from "@/components/Navbar/Navbar";
+import ChatBot from "@/components/ChatBot/ChatBot";
+import WorkspaceToolbar from "@/components/WorkspaceToolbar/WorkspaceToolbar";
+
 import { getProject, updateProject } from "@/services/api";
 
 /* 
@@ -208,16 +211,27 @@ export default function ProjectWorkspace() {
               )}
             </Grid>
           </Grid>
-
           <Box
             sx={{
+              display: "flex",
+              flexDirection: "row",
               flexGrow: 1,
-              marginTop: "15px",
-              padding: "0 20px",
-              minHeight: "400px",
+              maxHeight: "500px",       
             }}
           >
-            {isSynced && <Preview html={doc.html} css={doc.css} js={doc.js} />}
+            <WorkspaceToolbar user={user} projectId={projectId} />
+            <Box
+              sx={{
+                flexGrow: 1,
+                marginTop: "15px",
+                padding: "0 20px",
+                minHeight: "400px",
+              }}
+            >
+              {isSynced && (
+                <Preview html={doc.html} css={doc.css} js={doc.js} />
+              )}
+            </Box>
           </Box>
         </Box>
       </Box>

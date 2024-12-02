@@ -11,25 +11,25 @@ import {
 
 const projectsRouter = Router({ mergeParams: true });
 
-// POST /api/users/:id/projects
+// POST /api/users/:userId/projects
 projectsRouter.post("/", createProject);
 
-// POST /api/users/:id/projects/:projectId/collaborators
+// POST /api/users/:userId/projects/:projectId/collaborators
 projectsRouter.post("/:projectId/collaborators", addCollaborator);
 
-// GET /api/users/:id/projects
+// GET /api/users/:userId/projects
 projectsRouter.get("/", getProjects);
 
-// Get /api/users/:id/projects/shared
+// Get /api/users/:userId/projects/shared
 projectsRouter.get("/shared", getSharedProjects);
 
-// GET /api/users/:id/projects/:projectId
+// GET /api/users/:userId/projects/:projectId
 projectsRouter.get("/:projectId", getProject);
 
-// PATCH /api/users/:id/projects/:projectId
+// PATCH /api/users/:userId/projects/:projectId
 projectsRouter.patch("/:projectId", updateProject);
 
-// DELETE /api/users/:id/projects/:projectId
+// DELETE /api/users/:userId/projects/:projectId
 projectsRouter.delete("/:projectId", deleteProject);
 
 export default projectsRouter;
