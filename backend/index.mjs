@@ -40,7 +40,9 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
-      secure: process.env.ENV === "prod",
+      secure: "auto",
+      httpOnly: true,
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24,
     },
   })
