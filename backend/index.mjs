@@ -40,6 +40,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
+      secure: process.env.ENV === "prod",
       maxAge: 1000 * 60 * 60 * 24,
     },
   })
