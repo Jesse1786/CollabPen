@@ -25,7 +25,7 @@ const setUpGoogleStrategy = () => {
               email: profile.emails[0].value,
             });
             await user.save();
-            done(null, user);
+            return done(null, user);
           }
           done(null, user);
         } catch (error) {

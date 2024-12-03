@@ -37,7 +37,7 @@ export const oauthGoogleCallback = (req, res) => {
     if (!user) return res.status(401).json({ message: "Unauthenticated" });
 
     req.logIn(user, (err) => {
-      if (err) return res.status(500).json({ authenticated: false });
+      if (err) return res.status(500).json({ message: "Server error" });
       return res.redirect(FRONTEND_URL);
     });
   })(req, res);
