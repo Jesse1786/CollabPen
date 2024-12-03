@@ -42,7 +42,7 @@ app.use(
     cookie: {
       secure: process.env.ENV === "prod",
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24,
     },
   })
