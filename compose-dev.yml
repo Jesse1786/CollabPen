@@ -17,7 +17,7 @@ services:
     image: node:18-slim
     container_name: y-websocket
     working_dir: /app
-    entrypoint: ["npx", "y-websocket"]
+    entrypoint: ["npx", "y-websocket@2.1.0"]
     environment:
       - HOST=0.0.0.0
       - PORT=1234

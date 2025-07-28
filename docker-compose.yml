@@ -47,7 +47,7 @@ services:
     container_name: y-websocket
     working_dir: /app
     restart: always
-    entrypoint: ["npx", "y-websocket"]
+    entrypoint: ["npx", "y-websocket@2.1.0"]
     environment:
       - HOST=0.0.0.0
       - PORT=1234

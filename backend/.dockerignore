@@ -1,18 +1,17 @@
-# git
-**/.git
-**/.gitignore
+# Git
+.git
+.gitignore
 
-# docker
+# Dockerfiles
 Dockerfile.*
 *.dockerfile
 
-# node
-**/package-lock.json
-**/node_modules
+# Node modules
+node_modules
 
-# env
-**/.env
+# Environment variables
+.env
 
-# other
-**/README.md
-**/info.txt
+# Misc
+README.md
+info.txt
