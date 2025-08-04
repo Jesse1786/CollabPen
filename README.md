@@ -1,70 +1,46 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/DnqlZtdt)
+# ✏️ CollabPen
 
-# CollabPen: Design and Implementation Plan
+**CollabPen** is a full-stack, real-time collaborative code editor for HTML, CSS, and JavaScript. It allows users to create and manage code projects, collaborate live with others, and instantly preview their output — all within the browser.
 
-## Project Overview
+This project was built as a capstone-style demonstration of modern web development practices.
 
-### App Link
-[collabpen.ca](https://collabpen.ca/)
+---
 
-### Project Description
-Inspired by [codepen.io](https://codepen.io/)
+## 🚀 Features
 
-Online platform for showcasing and demoing code which allows users to type HTML, CSS, and JavaScript code, which is rendered in real-time. Multiple users can concurrently edit the same code, with changes being reflected for all users. Users can communicate through text or voice chat. Additional features include payment options, and an AI-assistant.
+- ✍️ Side-by-side HTML, CSS, and JavaScript editors
+- ⚡ Instant preview of combined output
+- 🤝 Real-time collaboration with shared cursors (Yjs + y-websocket)
+- 🔐 Authentication via local login and Google OAuth
+- 🗂️ Project dashboard for creating and managing workspaces
+- 🌐 HTTPS-enabled deployment on a Google Cloud VM using Docker and Nginx
 
-### Features
-#### Main Features
-- Users can type HTML, CSS, and JavaScipt code, and have the result rendered in real-time
-- Users can invite others to their project, allowing for multiple users to collaborate on the same project, with code changes being reflected for all users
-- Users can communicate with one another through text chat
-- Payment integration through Stripe, allowing users to pay for credits for additional features
+---
 
-#### Stretch Goals
-- Voice chat feature
-- AI-assisted coding with LangChain. The platform will store user code into vector databases, and provide context-relevant feedback with Retrieval Augmented Generation
+## 🛠️ Tech Stack
 
-### Challenges
-- Efficiently rendering a user's HTML, CSS, and JavaScript code in real-time
-- Real-time collaboration between users. Letting multiple users edit the same code, having conflicts be resolved gracefully, and reflecting code changes across all users
-- Security of the platform. Ensuring user code is properly quarantined to prevent malicious behaviour
-- Integration with other API and frameworks such as Stripe, LangChain, LLMs
-- Frontend technologies such as Bootstrap or Material UI
-- Efficiently backend DB logic
+| Layer       | Technology                          |
+|-------------|--------------------------------------|
+| Frontend    | Next.js, Material UI, CodeMirror     |
+| Backend     | Express.js, Passport.js              |
+| Real-Time   | Yjs, y-websocket                     |
+| Database    | MongoDB, Redis                       |
+| Auth        | Local login + Google OAuth           |
+| Deployment  | Docker, Nginx, Let's Encrypt, GCP VM |
 
-## Technology Stack
-Tentatively:
-- Next.js
-- Node.js with Express 
-- PostgreSQL or MongoDB
-- Stripe
-- Socket.io
-- LangChain
-- (Library for rendering code)
-- (Library to quarantine user code)
+---
 
-### Our Approach
-We plan to start by breaking the project down into smaller pieces. Since there are many technologies required, we will create small projects for each technology (such as Stripe, Socket, BootStrap, etc). This will allow us to learn and validate each technology separately, reducing complexity and avoiding integration issues. This will also save time and lead to minimal refactoring.
+## 🔐 Authentication
 
-Below we have a *tentative* schedule for our project. To keep on track, we will regularly update each other on our progress and frequently hold meetings.
+- Session-based login with `express-session`
+- Google OAuth via Passport
+- Environment-driven backend configuration
 
+---
 
-## Milestones & Timeline
-Very tentatively:
+## 🧪 Development
 
-**Weeks 1-2 (Leading up to Demo)** 
-- Set up a basic frontend with some library (learn Bootstrap/Material UI)
-- Find library to render user code and setup a small project with it
-- Develop a small project with Stripe
-- Develop small project with Socket.io for real-time collaboration
-
-**Weeks 3-4**
-- Update application to have multiple users
-    - Update frontend/backend to have registration/login functionality
-- Implement real-time collaboration between users
-- Implement payment functionality
-
-**Weeks 5-6**
-- Implement security features to quarantine user code
-- **If time allows:** Add additional functionality such as text/voice chat, AI-assistant
-
+This project is intended as a showcase and is not meant for public deployment or reuse.  
+There are still bugs and areas that can be optimized.  
+Feel free to explore the code, but please do not copy or redistribute without permission.
 
