@@ -74,6 +74,7 @@ export default function Register() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        bgcolor: "background.default", // explicitly set background
       }}
     >
       <Paper
