@@ -1,5 +1,7 @@
 # ✏️ CollabPen
 
+This project is inspired by [CodePen.io](https://codepen.io).
+
 **CollabPen** is a full-stack, real-time collaborative code editor for HTML, CSS, and JavaScript. It allows users to create and manage code projects, collaborate live with others, and instantly preview their output — all within the browser.
 
 This project was built as a capstone-style demonstration of modern web development practices.
