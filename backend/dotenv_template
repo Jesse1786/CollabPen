@@ -1,6 +1,9 @@
 # Frontend
 FRONTEND_URL=https://collabpen.ca
 
+# Backend
+BACKEND_URL=https://api.collabpen.ca
+
 # Session
 SESSION_SECRET=
 
