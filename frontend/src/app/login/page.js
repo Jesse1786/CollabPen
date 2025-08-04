@@ -77,6 +77,7 @@ export default function Login() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        bgcolor: "background.default", // explicitly set background
       }}
     >
       <Paper
