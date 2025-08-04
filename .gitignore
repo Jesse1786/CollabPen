@@ -12,3 +12,7 @@ data
 
 # redis
 redis-data
+
+# certs and acme
+acme/
+certs/

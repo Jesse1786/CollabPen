@@ -3,6 +3,7 @@ import { encode as base64Encode } from "base64-arraybuffer";
 import { Project } from "../models/Project.mjs";
 import { User } from "../models/User.mjs";
 import { Chat } from "../models/Chat.mjs";
+import { PLACEHOLDER_HTML, PLACEHOLDER_CSS, PLACEHOLDER_JS } from "../utils/placeholderCode.mjs";
 
 const MAX_COLLABORATORS = 5;
 
@@ -31,9 +32,9 @@ export const createProject = async (req, res) => {
 
     // Create a new ydoc and store it as a string
     const ydoc = new Y.Doc();
-    ydoc.getText("html").insert(0, "");
-    ydoc.getText("css").insert(0, "");
-    ydoc.getText("js").insert(0, "");
+    ydoc.getText("html").insert(0, PLACEHOLDER_HTML);
+    ydoc.getText("css").insert(0, PLACEHOLDER_CSS);
+    ydoc.getText("js").insert(0, PLACEHOLDER_JS);
 
     const ydocUpdate = Y.encodeStateAsUpdate(ydoc);
     // Convert the Uint8Array to a base64-encoded string to store in the database

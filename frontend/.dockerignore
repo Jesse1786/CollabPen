@@ -1,18 +1,17 @@
-# git
-**/.git
-**/.gitignore
+# Git
+.git
+.gitignore
 
-# docker
+# Dockerfiles
 Dockerfile.*
 *.dockerfile
 
-# node
-**/package-lock.json
-**/node_modules
+# Node modules
+node_modules
 
-# next.js
+# Next.js build output
 .next
 
-# other
+# Misc
 README.md
-**/info.txt
+info.txt
