@@ -74,8 +74,8 @@ function TabIndexSetter(props) {
   // Set the tab index based on the URL query parameter
   useEffect(() => {
     const tab = searchParams.get("tab");
-    if (tab === "account") {
-      setTabIndex(3);
+    if (tab === "settings") {
+      setTabIndex(2);
       router.replace("/dashboard");
     }
   }, [setTabIndex, router, searchParams]);
@@ -132,7 +132,6 @@ export default function Dashboard() {
             >
               <Tab label="My Projects" sx={{ fontSize: "1rem" }} />
               <Tab label="Shared Projects" sx={{ fontSize: "1rem" }} />
-              <Tab label="Payment" sx={{ fontSize: "1rem" }} />
               <Tab label="Settings" sx={{ fontSize: "1rem" }} />
             </Tabs>
           </LeftSection>
@@ -145,10 +144,7 @@ export default function Dashboard() {
               <SharedProjectPanel />
             </TabPanel>
             <TabPanel value={tabIndex} index={2}>
-              Payment page coming soon...
-            </TabPanel>
-            <TabPanel value={tabIndex} index={3}>
-              Settings page coming soon...
+              Settings page under development.
             </TabPanel>
           </RightSection>
         </Box>

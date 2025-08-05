@@ -41,7 +41,7 @@ export default function Navbar() {
   };
 
   const handleSettings = async () => {
-    router.push("/dashboard/?tab=account");
+    router.push("/dashboard/?tab=settings");
   };
 
   return (
