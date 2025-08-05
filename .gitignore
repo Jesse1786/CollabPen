@@ -16,3 +16,6 @@ redis-data
 # certs and acme
 acme/
 certs/
+
+# other
+.DS_Store
