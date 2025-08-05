@@ -43,7 +43,8 @@ This project is inspired by [CodePen.io](https://codepen.io).
 
 ## 🧪 Development
 
-This project was built from scratch and is intended as a showcase. It is not meant for public deployment or reuse, as there are still bugs and areas that can be optimized.  
+This project was built from scratch and is intended as a showcase. It is not meant for public deployment or reuse, as there are still bugs and areas that can be optimized. 
+
 Feel free to explore the code, but please do not copy or redistribute without permission.
 
 ---
